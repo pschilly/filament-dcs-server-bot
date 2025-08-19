@@ -4,6 +4,8 @@ namespace Pschilly\FilamentDcsServerStats;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Pschilly\DcsServerBotApi\Widgets;
+use Pschilly\DcsServerBotApi\Pages;
 
 class FilamentDcsServerStatsPlugin implements Plugin
 {
@@ -14,7 +16,16 @@ class FilamentDcsServerStatsPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        //
+        $panel
+            ->pages([
+                Pages\Leaderboard::class,
+            ])
+            ->widgets([
+                Widgets\DailyPlayersChart::class,
+                Widgets\TopPilots::class,
+                Widgets\TopSquadrons::class,
+                Widgets\ServerStatistics::class,
+            ]);
     }
 
     public function boot(Panel $panel): void
