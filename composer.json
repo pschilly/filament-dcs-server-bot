@@ -1,30 +1,28 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "pschilly/filament-dcs-server-stats",
+    "description": "This package is a series of widgets, pages and panels for Filament PHP and is loaded as a plugin. It interfaces with the DCS Server Bot API by Special-K to obtain statistics gathered from managed Digital Combat Simulator (DCS) servers.",
     "keywords": [
-        ":vendor_name",
+        "pschilly",
         "laravel",
         "filamentphp",
-        ":package_slug"
+        "filament-dcs-server-stats"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/pschilly/filament-dcs-server-stats",
     "support": {
-        "issues": "https://github.com/:vendor_slug/:package_slug/issues",
-        "source": "https://github.com/:vendor_slug/:package_slug"
+        "issues": "https://github.com/pschilly/filament-dcs-server-stats/issues",
+        "source": "https://github.com/pschilly/filament-dcs-server-stats"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Schilly",
+            "email": "patrick@hardpointconsulting.ca",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.2",
         "filament/filament": "^4.0",
-        "filament/forms": "^4.0",
-        "filament/tables": "^4.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -38,37 +36,33 @@
         "pestphp/pest-plugin-livewire": "^3.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0",
-        "rector/rector": "^2.0",
-        "spatie/laravel-ray": "^1.26"
+        "phpstan/phpstan-phpunit": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Pschilly\\FilamentDcsServerStats\\": "src/",
+            "Pschilly\\FilamentDcsServerStats\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "Pschilly\\FilamentDcsServerStats\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyse": "phpstan analyse",
         "lint": "pint",
-        "refactor": "rector",
         "test": "pest",
-        "test:lint": "pint --test",
-        "test:refactor": "rector --dry-run"
+        "test:lint": "pint --test"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Pschilly\\FilamentDcsServerStats\\FilamentDcsServerStatsServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentDcsServerStats": "Pschilly\\FilamentDcsServerStats\\Facades\\FilamentDcsServerStats"
             }
         }
     },

@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace Pschilly\FilamentDcsServerStats;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
@@ -13,14 +13,14 @@ use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
-use VendorName\Skeleton\Testing\TestsSkeleton;
+use Pschilly\FilamentDcsServerStats\Commands\FilamentDcsServerStatsCommand;
+use Pschilly\FilamentDcsServerStats\Testing\TestsFilamentDcsServerStats;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'skeleton';
+    public static string $name = 'filament-dcs-server-stats';
 
-    public static string $viewNamespace = 'skeleton';
+    public static string $viewNamespace = 'filament-dcs-server-stats';
 
     public function configurePackage(Package $package): void
     {
@@ -30,23 +30,12 @@ class SkeletonServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package->name(static::$name)
-            ->hasCommands($this->getCommands())
-            ->hasInstallCommand(function (InstallCommand $command) {
-                $command
-                    ->publishConfigFile()
-                    ->publishMigrations()
-                    ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub(':vendor_slug/:package_slug');
-            });
+            ->hasCommands($this->getCommands());
 
         $configFileName = $package->shortName();
 
         if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
             $package->hasConfigFile();
-        }
-
-        if (file_exists($package->basePath('/../database/migrations'))) {
-            $package->hasMigrations($this->getMigrations());
         }
 
         if (file_exists($package->basePath('/../resources/lang'))) {
@@ -76,22 +65,22 @@ class SkeletonServiceProvider extends PackageServiceProvider
         // Icon Registration
         FilamentIcon::register($this->getIcons());
 
-        // Handle Stubs
-        if (app()->runningInConsole()) {
-            foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
-                $this->publishes([
-                    $file->getRealPath() => base_path("stubs/skeleton/{$file->getFilename()}"),
-                ], 'skeleton-stubs');
-            }
-        }
+        // // Handle Stubs
+        // if (app()->runningInConsole()) {
+        //     foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
+        //         $this->publishes([
+        //             $file->getRealPath() => base_path("stubs/filament-dcs-server-stats/{$file->getFilename()}"),
+        //         ], 'filament-dcs-server-stats-stubs');
+        //     }
+        // }
 
-        // Testing
-        Testable::mixin(new TestsSkeleton);
+        // // Testing
+        // Testable::mixin(new TestsFilamentDcsServerStats);
     }
 
     protected function getAssetPackageName(): ?string
     {
-        return ':vendor_slug/:package_slug';
+        return 'pschilly/filament-dcs-server-stats';
     }
 
     /**
@@ -100,9 +89,9 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('skeleton', __DIR__ . '/../resources/dist/components/skeleton.js'),
-            // Css::make('skeleton-styles', __DIR__ . '/../resources/dist/skeleton.css'),
-            // Js::make('skeleton-scripts', __DIR__ . '/../resources/dist/skeleton.js'),
+            // AlpineComponent::make('filament-dcs-server-stats', __DIR__ . '/../resources/dist/components/filament-dcs-server-stats.js'),
+            // Css::make('filament-dcs-server-stats-styles', __DIR__ . '/../resources/dist/filament-dcs-server-stats.css'),
+            // Js::make('filament-dcs-server-stats-scripts', __DIR__ . '/../resources/dist/filament-dcs-server-stats.js'),
         ];
     }
 
@@ -111,9 +100,7 @@ class SkeletonServiceProvider extends PackageServiceProvider
      */
     protected function getCommands(): array
     {
-        return [
-            SkeletonCommand::class,
-        ];
+        return [];
     }
 
     /**
@@ -145,8 +132,6 @@ class SkeletonServiceProvider extends PackageServiceProvider
      */
     protected function getMigrations(): array
     {
-        return [
-            'create_skeleton_table',
-        ];
+        return [];
     }
 }
