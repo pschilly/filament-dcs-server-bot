@@ -2,15 +2,9 @@
 
 namespace Pschilly\FilamentDcsServerStats;
 
-use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
-use Filament\Support\Assets\Css;
-use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
-use Illuminate\Filesystem\Filesystem;
-use Livewire\Features\SupportTesting\Testable;
-use Pschilly\FilamentDcsServerStats\Testing\TestsFilamentDcsServerStats;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -28,27 +22,15 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package->name(static::$name)
-            ->hasCommands($this->getCommands());
-
-        $configFileName = $package->shortName();
-
-        if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
-            $package->hasConfigFile();
-        }
-
-        if (file_exists($package->basePath('/../resources/lang'))) {
-            $package->hasTranslations();
-        }
-
-        if (file_exists($package->basePath('/../resources/views'))) {
-            $package->hasViews(static::$viewNamespace);
-        }
+            ->hasViews();
     }
 
     public function packageRegistered(): void {}
 
     public function packageBooted(): void
     {
+        WidgetManager::make()->boot();
+
         // Asset Registration
         FilamentAsset::register(
             $this->getAssets(),
@@ -62,18 +44,6 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
 
         // Icon Registration
         FilamentIcon::register($this->getIcons());
-
-        // // Handle Stubs
-        // if (app()->runningInConsole()) {
-        //     foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
-        //         $this->publishes([
-        //             $file->getRealPath() => base_path("stubs/filament-dcs-server-stats/{$file->getFilename()}"),
-        //         ], 'filament-dcs-server-stats-stubs');
-        //     }
-        // }
-
-        // // Testing
-        // Testable::mixin(new TestsFilamentDcsServerStats);
     }
 
     protected function getAssetPackageName(): ?string

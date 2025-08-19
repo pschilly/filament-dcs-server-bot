@@ -1,6 +1,6 @@
 <?php
 
-namespace Pschilly\DcsServerBotApi\Filament\Widgets;
+namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Pschilly\DcsServerBotApi\Widgets;
+namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Http;

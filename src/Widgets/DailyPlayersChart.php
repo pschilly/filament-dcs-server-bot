@@ -1,11 +1,11 @@
 <?php
 
-namespace Pschilly\DcsServerBotApi\Widgets;
+namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
-use Pschilly\DcsServerBotApi\Traits\ServerSpecificResults;
+use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 
 class DailyPlayersChart extends ChartWidget
 {

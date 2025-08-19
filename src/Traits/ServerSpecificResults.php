@@ -1,6 +1,6 @@
 <?php
 
-namespace Pschilly\DcsServerBotApi\Traits;
+namespace Pschilly\FilamentDcsServerStats\Traits;
 
 trait ServerSpecificResults
 {

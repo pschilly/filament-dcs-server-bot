@@ -1,6 +1,6 @@
 <?php
 
-namespace Pschilly\DcsServerBotApi\Pages;
+namespace Pschilly\FilamentDcsServerStats\Pages;
 
 use Carbon\CarbonInterval;
 use Filament\Pages\Page;
@@ -11,14 +11,12 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Http;
-use Schmeits\FilamentPhosphorIcons\Support\Icons\Phosphor;
-use Schmeits\FilamentPhosphorIcons\Support\Icons\PhosphorWeight;
 
 class Leaderboard extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected string $view = 'filament.pages.leaderboard';
+    protected string $view = 'filament-dcs-server-stats::pages.leaderboard';
 
     public function getMaxContentWidth(): Width
     {
@@ -104,7 +102,7 @@ class Leaderboard extends Page implements HasTable
             ->columns([
                 ViewColumn::make('index')
                     ->label('No.')
-                    ->view('filament.tables.columns.leaderboard-row-number'),
+                    ->view('filament-dcs-server-stats::tables.columns.leaderboard-row-number'),
                 TextColumn::make('nick')->label('Pilot'),
                 TextColumn::make('kills')->label('Kills')->toggleable(),
                 TextColumn::make('deaths')->label('Deaths')->toggleable(),
