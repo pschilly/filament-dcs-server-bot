@@ -7,7 +7,6 @@ namespace Pschilly\FilamentDcsServerStats;
 use Filament\Widgets\WidgetConfiguration;
 use Livewire\Livewire;
 use Livewire\Mechanisms\ComponentRegistry;
-use Pschilly\FilamentDcsServerStats\Widgets;
 use Pschilly\FilamentDcsServerStats\Livewire as PluginLivewire;
 
 class WidgetManager
@@ -27,7 +26,7 @@ class WidgetManager
         Widgets\TopPilots::class,
         Widgets\TopSquadrons::class,
         Widgets\ServerStatistics::class,
-        Widgets\Highscore::class
+        Widgets\Highscore::class,
     ];
 
     public static function make(): static
