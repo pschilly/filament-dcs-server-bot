@@ -1,13 +1,15 @@
 # This package is a series of widgets, pages and panels for Filament PHP and is loaded as a plugin. It interfaces with the DCS Server Bot API by Special-K to obtain statistics gathered from managed Digital Combat Simulator (DCS) servers.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/pschilly/filament-dcs-server-stats.svg?style=flat-square)](https://packagist.org/packages/pschilly/filament-dcs-server-stats)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/pschilly/filament-dcs-server-stats/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/pschilly/filament-dcs-server-stats/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/pschilly/filament-dcs-server-stats/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/pschilly/filament-dcs-server-stats/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/pschilly/filament-dcs-server-stats.svg?style=flat-square)](https://packagist.org/packages/pschilly/filament-dcs-server-stats)
+![Filament 4.x Required](https://img.shields.io/badge/Filament-4.x-FF2D20?style=for-the-badge)
+[![DCSServerBotAPI](https://img.shields.io/badge/DCS_Server_Bot_API-0.1-green?style=for-the-badge)](https://github.com/pschilly/dcs-server-bot-api)
+[![DCSServerBot](https://img.shields.io/badge/🤖_Requires-DCS_Server_Bot-green?style=for-the-badge)](https://github.com/Special-K-s-Flightsim-Bots/DCSServerBot)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/pschilly/filament-dcs-server-stats/fix-php-code-style-issues.yml?branch=main&style=for-the-badge)
 
 
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+
+
+This package is a series of widgets, pages and panels for Filament PHP and is loaded as a plugin. It interfaces with the DCS Server Bot API by Special-K to obtain statistics gathered from managed Digital Combat Simulator (DCS) servers.
 
 ## Installation
 
