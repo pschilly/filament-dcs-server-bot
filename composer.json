@@ -23,6 +23,7 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^4.0",
+        "pschilly/dcs-server-bot-api": "^0.1.0",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -40,13 +41,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Pschilly\\FilamentDcsServerStats\\": "src/",
-            "Pschilly\\FilamentDcsServerStats\\Database\\Factories\\": "database/factories/"
+            "Pschilly\\FilamentDcsServerStats\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Pschilly\\FilamentDcsServerStats\\Tests\\": "tests/"
         }
     },
     "scripts": {
