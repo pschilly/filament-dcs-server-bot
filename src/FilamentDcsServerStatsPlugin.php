@@ -4,8 +4,8 @@ namespace Pschilly\FilamentDcsServerStats;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Pschilly\DcsServerBotApi\Widgets;
 use Pschilly\DcsServerBotApi\Pages;
+use Pschilly\DcsServerBotApi\Widgets;
 
 class FilamentDcsServerStatsPlugin implements Plugin
 {

@@ -14,9 +14,10 @@ class DailyPlayersChart extends ChartWidget
     protected ?string $pollingInterval = '120s';
 
     protected $listeners = ['serverSelected' => 'handleServerSelected'];
+
     protected ?string $heading = 'Daily Players Chart';
 
-    protected array|string|int $columnSpan = 4;
+    protected array | string | int $columnSpan = 4;
 
     protected ?string $maxHeight = '300px';
 

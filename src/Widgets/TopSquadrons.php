@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Http;
 class TopSquadrons extends ChartWidget
 {
     protected ?string $heading = 'Top Squadrons by Credits';
+
     protected ?string $pollingInterval = '120s';
 
-    protected array|string|int $columnSpan = 2;
+    protected array | string | int $columnSpan = 2;
+
     protected ?string $maxHeight = '300px';
 
     public ?string $filter = '3';
@@ -39,7 +41,9 @@ class TopSquadrons extends ChartWidget
         // For each squadron, get credits
         foreach ($squadrons as $squadron) {
             $name = $squadron['name'] ?? null;
-            if (!$name) continue;
+            if (! $name) {
+                continue;
+            }
 
             $creditsResponse = Http::asForm()->baseUrl($baseUrl)
                 ->post('/squadron_credits', ['name' => $name])

@@ -2,16 +2,13 @@
 
 namespace Pschilly\DcsServerBotApi\Filament\Widgets;
 
-use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
-use User;
 
 class Highscore extends TableWidget
 {
@@ -19,18 +16,19 @@ class Highscore extends TableWidget
 
     protected ?string $pollingInterval = '120s';
 
-    public $servername = NULL;
+    public $servername = null;
 
     protected $listeners = ['serverSelected' => 'handleServerSelected'];
 
     public function handleServerSelected($serverName)
     {
         if ($serverName == 0) {
-            $this->servername = NULL;
+            $this->servername = null;
         } else {
             $this->servername = $serverName;
         }
     }
+
     protected function getFormSchema(): array
     {
         return [
@@ -47,7 +45,7 @@ class Highscore extends TableWidget
                     'Most Efficient Killers' => 'Most Efficient Killers',
                     'Most Wasteful Pilots' => 'Most Wasteful Pilots',
                 ])
-                ->live()
+                ->live(),
         ];
     }
 
@@ -63,7 +61,7 @@ class Highscore extends TableWidget
 
                 // Fetch the data, passing server_name if set
                 $params = [
-                    'limit' => 10
+                    'limit' => 10,
                 ];
 
                 if ($serverName) {
@@ -92,7 +90,7 @@ class Highscore extends TableWidget
                 foreach ($categories as $cat) {
                     foreach ($raw[$cat] ?? [] as $entry) {
                         $nick = $entry['nick'];
-                        if (!isset($pilots[$nick])) {
+                        if (! isset($pilots[$nick])) {
                             $pilots[$nick] = ['nick' => $nick];
                         }
                         // Use 'playtime' for playtime, 'value' for others
@@ -111,7 +109,7 @@ class Highscore extends TableWidget
                         25 => '25',
                         50 => '50',
                         100 => '100',
-                    ])
+                    ]),
             ])
             ->columns([
                 TextColumn::make('nick')->label('Pilot'),

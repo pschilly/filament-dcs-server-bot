@@ -11,8 +11,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Http;
-use Schmeits\FilamentPhosphorIcons\Support\Icons\Phosphor;
-use Schmeits\FilamentPhosphorIcons\Support\Icons\PhosphorWeight;
 
 class Leaderboard extends Page implements HasTable
 {
@@ -47,6 +45,7 @@ class Leaderboard extends Page implements HasTable
                     return $entry['value'] ?? 0;
                 }
             }
+
             return 0;
         };
 
@@ -61,7 +60,7 @@ class Leaderboard extends Page implements HasTable
 
             // Get top Module based on # kills
             $topModuleKills = null;
-            if (!empty($playerInfo['killsByModule']) && is_array($playerInfo['killsByModule'])) {
+            if (! empty($playerInfo['killsByModule']) && is_array($playerInfo['killsByModule'])) {
                 $topModuleKills = collect($playerInfo['killsByModule'])
                     ->sortByDesc('kills')
                     ->first();
@@ -69,7 +68,7 @@ class Leaderboard extends Page implements HasTable
 
             // Get Top module by KDR
             $topModuleKdr = null;
-            if (!empty($playerInfo['kdrByModule']) && is_array($playerInfo['kdrByModule'])) {
+            if (! empty($playerInfo['kdrByModule']) && is_array($playerInfo['kdrByModule'])) {
                 $topModuleKdr = collect($playerInfo['kdrByModule'])
                     ->sortByDesc('kdr')
                     ->first();
@@ -100,7 +99,7 @@ class Leaderboard extends Page implements HasTable
         })->toArray();
 
         return $table
-            ->records(fn() => $records)
+            ->records(fn () => $records)
             ->columns([
                 ViewColumn::make('index')
                     ->label('No.')
@@ -115,7 +114,7 @@ class Leaderboard extends Page implements HasTable
                 TextColumn::make('teamkills')->label('Team Kills')->toggleable(),
                 TextColumn::make('kills_pvp')->label('Kills PvP')->toggleable()->toggledHiddenByDefault(),
                 TextColumn::make('deaths_pvp')->label('Deaths PvP')->toggleable()->toggledHiddenByDefault(),
-                TextColumn::make('playtime')->label('Playtime')->formatStateUsing(fn($state) => CarbonInterval::seconds($state)->cascade()->forHumans(null, true, 2))->toggleable(),
+                TextColumn::make('playtime')->label('Playtime')->formatStateUsing(fn ($state) => CarbonInterval::seconds($state)->cascade()->forHumans(null, true, 2))->toggleable(),
                 TextColumn::make('kdr')->numeric(decimalPlaces: 2)->label('KDR')->toggleable(),
                 TextColumn::make('topModuleKillsName')
                     ->formatStateUsing(function ($state, $record) {

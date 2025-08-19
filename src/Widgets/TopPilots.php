@@ -2,19 +2,21 @@
 
 namespace Pschilly\DcsServerBotApi\Widgets;
 
-use Filament\Widgets\ChartWidget;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
+use Filament\Widgets\ChartWidget;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
 use Illuminate\Support\Facades\Http;
 
 class TopPilots extends ChartWidget
 {
     use HasFiltersSchema;
+
     protected ?string $pollingInterval = '120s';
 
     // protected ?string $heading = 'Top Pilots';
-    protected array|string|int $columnSpan = 2;
+    protected array | string | int $columnSpan = 2;
+
     protected ?string $maxHeight = '300px';
 
     public function filtersSchema(Schema $schema): Schema
@@ -52,7 +54,6 @@ class TopPilots extends ChartWidget
         }
     }
 
-
     protected function getData(): array
     {
         $number = $this->filters['pilotCount'];
@@ -60,7 +61,6 @@ class TopPilots extends ChartWidget
 
         $baseUrl = 'http://192.168.50.143:9876';
         $data = Http::baseUrl($baseUrl)->get('/' . $chartType, ['limit' => $number])->json();
-
 
         $topPilots = array_slice($data, 0, $number);
 
