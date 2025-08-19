@@ -10,11 +10,9 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Pschilly\FilamentDcsServerStats\Testing\TestsFilamentDcsServerStats;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Pschilly\FilamentDcsServerStats\Commands\FilamentDcsServerStatsCommand;
-use Pschilly\FilamentDcsServerStats\Testing\TestsFilamentDcsServerStats;
 
 class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
 {
