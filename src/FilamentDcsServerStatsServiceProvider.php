@@ -3,6 +3,8 @@
 namespace Pschilly\FilamentDcsServerStats;
 
 use Filament\Support\Assets\Asset;
+use Filament\Support\Assets\Css;
+use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Spatie\LaravelPackageTools\Package;
@@ -57,9 +59,8 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('filament-dcs-server-stats', __DIR__ . '/../resources/dist/components/filament-dcs-server-stats.js'),
-            // Css::make('filament-dcs-server-stats-styles', __DIR__ . '/../resources/dist/filament-dcs-server-stats.css'),
-            // Js::make('filament-dcs-server-stats-scripts', __DIR__ . '/../resources/dist/filament-dcs-server-stats.js'),
+            Css::make('filament-dcs-server-stats-styles', __DIR__ . '/../resources/dist/filament-dcs-server-stats.css'),
+            Js::make('filament-dcs-server-stats-scripts', __DIR__ . '/../resources/dist/filament-dcs-server-stats.js'),
         ];
     }
 

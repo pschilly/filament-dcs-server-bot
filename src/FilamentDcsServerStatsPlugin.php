@@ -102,7 +102,6 @@ class FilamentDcsServerStatsPlugin implements Plugin
                 fn(): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
             );
         }
-        //
     }
 
     public static function make(): static

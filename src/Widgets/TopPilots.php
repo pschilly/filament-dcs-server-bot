@@ -7,10 +7,27 @@ use Filament\Schemas\Schema;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
 use Illuminate\Support\Facades\Http;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
+use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 
 class TopPilots extends ChartWidget
 {
     use HasFiltersSchema;
+    use ServerSpecificResults;
+
+    protected $listeners = [];
+
+    public function mount(): void
+    {
+        $this->listeners = array_merge(
+            $this->listeners,
+            $this->getServerSpecificListeners()
+        );
+
+        // Ensure filters have default values
+        $this->filters['chartType'] ??= 'topkills';
+        $this->filters['pilotCount'] ??= 5;
+    }
 
     protected ?string $pollingInterval = '120s';
 
@@ -45,41 +62,95 @@ class TopPilots extends ChartWidget
 
     public function getHeading(): string
     {
-        if ($this->filters['chartType'] === 'topkills') {
-            return 'Top ' . $this->filters['pilotCount'] . ' Pilots by Kills';
-        } elseif ($this->filters['chartType'] === 'topkdr') {
-            return 'Top ' . $this->filters['pilotCount'] . ' Pilots by KDR';
+        $chartType = $this->filters['chartType'] ?? 'topkills';
+        $pilotCount = $this->filters['pilotCount'] ?? 5;
+
+        if ($chartType === 'topkills') {
+            return 'Top ' . $pilotCount . ' Pilots by Kills';
+        } elseif ($chartType === 'topkdr') {
+            return 'Top ' . $pilotCount . ' Pilots by KDR';
         } else {
-            return 'Top ' . $this->filters['pilotCount'] . ' Pilots';
+            return 'Top ' . $pilotCount . ' Pilots';
         }
     }
 
     protected function getData(): array
     {
-        $number = $this->filters['pilotCount'];
-        $chartType = $this->filters['chartType'];
+        $number = $this->filters['pilotCount'] ?? 5;
+        $chartType = $this->filters['chartType'] ?? 'topkills';
 
-        $baseUrl = 'http://192.168.50.143:9876';
-        $data = Http::baseUrl($baseUrl)->get('/' . $chartType, ['limit' => $number])->json();
-
-        $topPilots = array_slice($data, 0, $number);
+        // Call the appropriate API method based on the selected chart type
+        if ($chartType === 'topkills') {
+            $pilotData = DcsServerBotApi::getTopKills($number, $this->serverName);
+        } else {
+            $pilotData = DcsServerBotApi::getTopKDR($number, $this->serverName);
+        }
 
         $labels = [];
-        $values = [];
+        $kills = [];
+        $kdrs = [];
+        $deaths = [];
 
-        foreach ($topPilots as $pilot) {
+        foreach (array_slice($pilotData, 0, $number) as $pilot) {
             $labels[] = $pilot['nick'];
-            $values[] = $pilot['kills'];
+            $kills[] = $pilot['kills'] ?? 0;
+            $kdrs[] = $pilot['kdr'] ?? 0;
+            $deaths[] = $pilot['deaths'] ?? 0;
+        }
+
+        // Change dataset order and assign colors based on chartType
+        if ($chartType === 'topkdr') {
+            $datasets = [
+                [
+                    'label' => 'KDR',
+                    'data' => $kdrs,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(245, 158, 66, 0.5)', // warning
+                    'borderColor' => 'rgba(245, 158, 66, 1)',
+                ],
+                [
+                    'label' => 'Kills',
+                    'data' => $kills,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.5)', // primary
+                    'borderColor' => 'rgba(59, 130, 246, 1)',
+                ],
+                [
+                    'label' => 'Deaths',
+                    'data' => $deaths,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(239, 68, 68, 0.5)', // danger
+                    'borderColor' => 'rgba(239, 68, 68, 1)',
+                ],
+            ];
+        } else {
+            $datasets = [
+                [
+                    'label' => 'Kills',
+                    'data' => $kills,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.5)', // primary
+                    'borderColor' => 'rgba(59, 130, 246, 1)',
+                ],
+                [
+                    'label' => 'KDR',
+                    'data' => $kdrs,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(245, 158, 66, 0.5)', // warning
+                    'borderColor' => 'rgba(245, 158, 66, 1)',
+                ],
+                [
+                    'label' => 'Deaths',
+                    'data' => $deaths,
+                    'fill' => true,
+                    'backgroundColor' => 'rgba(239, 68, 68, 0.5)', // danger
+                    'borderColor' => 'rgba(239, 68, 68, 1)',
+                ],
+            ];
         }
 
         return [
-            'datasets' => [
-                [
-                    'label' => 'Kills',
-                    'data' => $values,
-                    'fill' => true,
-                ],
-            ],
+            'datasets' => $datasets,
             'labels' => $labels,
         ];
     }
@@ -94,7 +165,7 @@ class TopPilots extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
                 ],
             ],
         ];

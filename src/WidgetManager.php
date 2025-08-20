@@ -26,8 +26,7 @@ class WidgetManager
         Widgets\DailyPlayersChart::class,
         Widgets\TopPilots::class,
         Widgets\TopSquadrons::class,
-        Widgets\ServerStatistics::class,
-        Widgets\Highscore::class
+        Widgets\ServerStatistics::class
     ];
 
     public static function make(): static

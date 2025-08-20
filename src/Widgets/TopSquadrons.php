@@ -4,6 +4,7 @@ namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Http;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class TopSquadrons extends ChartWidget
 {
@@ -31,10 +32,8 @@ class TopSquadrons extends ChartWidget
     {
         $activeFilter = (int) $this->filter;
 
-        $baseUrl = 'http://192.168.50.143:9876';
-
         // Get all squadrons
-        $squadrons = Http::baseUrl($baseUrl)->get('/squadrons')->json();
+        $squadrons = DcsServerBotApi::getSquadronList();
 
         $squadronCredits = [];
 
@@ -45,10 +44,7 @@ class TopSquadrons extends ChartWidget
                 continue;
             }
 
-            $creditsResponse = Http::asForm()->baseUrl($baseUrl)
-                ->post('/squadron_credits', ['name' => $name])
-                ->json();
-
+            $creditsResponse = DcsServerBotApi::getSquadronCredits($name);
             $credits = $creditsResponse['credits'] ?? 0;
             $squadronCredits[$name] = $credits;
         }
