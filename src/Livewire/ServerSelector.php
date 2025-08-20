@@ -2,12 +2,13 @@
 
 namespace Pschilly\FilamentDcsServerStats\Livewire;
 
-use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use Livewire\Component;
 
 class ServerSelector extends Component
 {
     public $servers = [];
+
     public $selectedServer = '';
 
     public function mount()

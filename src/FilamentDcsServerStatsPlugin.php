@@ -4,8 +4,6 @@ namespace Pschilly\FilamentDcsServerStats;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Pschilly\FilamentDcsServerStats\Widgets;
-use Pschilly\FilamentDcsServerStats\Pages;
 use Livewire\Livewire;
 
 class FilamentDcsServerStatsPlugin implements Plugin
@@ -30,7 +28,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
      * Pass null or empty array to enable all.
      * Pass false to disable all pages.
      */
-    public function pages(null|array|false $pages = null): static
+    public function pages(null | array | false $pages = null): static
     {
         if ($pages === false) {
             $this->pages = [];
@@ -39,6 +37,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
         } else {
             $this->pages = null;
         }
+
         return $this;
     }
 
@@ -49,6 +48,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
     public function dashboard(bool $enabled = true): static
     {
         $this->dashboard = $enabled;
+
         return $this;
     }
 
@@ -59,6 +59,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
     public function serverSelector(bool $enabled = true): static
     {
         $this->serverSelector = $enabled;
+
         return $this;
     }
 
@@ -99,7 +100,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
         if ($this->serverSelector) {
             \Filament\Support\Facades\FilamentView::registerRenderHook(
                 \Filament\View\PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
-                fn(): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
             );
         }
     }

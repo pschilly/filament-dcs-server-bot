@@ -7,7 +7,6 @@ namespace Pschilly\FilamentDcsServerStats;
 use Filament\Widgets\WidgetConfiguration;
 use Livewire\Livewire;
 use Livewire\Mechanisms\ComponentRegistry;
-use Pschilly\FilamentDcsServerStats\Widgets;
 use Pschilly\FilamentDcsServerStats\Livewire as PluginLivewire;
 
 class WidgetManager

@@ -12,6 +12,7 @@ class Dashboard extends BaseDashboard
     {
         return '';
     }
+
     public function getColumns(): int | array
     {
         return 4;
