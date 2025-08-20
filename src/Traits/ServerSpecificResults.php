@@ -24,5 +24,7 @@ trait ServerSpecificResults
         } else {
             $this->serverName = $serverName;
         }
+
+        $this->dispatch('$refresh');
     }
 }

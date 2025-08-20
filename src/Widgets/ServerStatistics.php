@@ -12,11 +12,22 @@ use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 class ServerStatistics extends StatsOverviewWidget
 {
     use InteractsWithPageFilters;
-    use ServerSpecificResults;
 
     protected ?string $pollingInterval = '120s';
 
-    protected $listeners = ['serverSelected' => 'handleServerSelected'];
+    public $serverName = null;
+
+    protected $listeners = [
+        'serverSelected' => 'handleServerSelected',
+    ];
+
+    public function handleServerSelected($serverName)
+    {
+        $this->serverName = $serverName;
+        // If your chart uses polling, it will update automatically.
+        // Otherwise, you may need to trigger a refresh:
+        $this->dispatch('$refresh');
+    }
 
     protected int | string | array $columnSpan = 4;
 

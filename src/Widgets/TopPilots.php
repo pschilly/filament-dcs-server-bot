@@ -13,17 +13,23 @@ use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 class TopPilots extends ChartWidget
 {
     use HasFiltersSchema;
-    use ServerSpecificResults;
 
-    protected $listeners = [];
+    public $serverName = null;
+
+    protected $listeners = [
+        'serverSelected' => 'handleServerSelected',
+    ];
+
+    public function handleServerSelected($serverName)
+    {
+        $this->serverName = $serverName;
+        // If your chart uses polling, it will update automatically.
+        // Otherwise, you may need to trigger a refresh:
+        $this->dispatch('$refresh');
+    }
 
     public function mount(): void
     {
-        $this->listeners = array_merge(
-            $this->listeners,
-            $this->getServerSpecificListeners()
-        );
-
         // Ensure filters have default values
         $this->filters['chartType'] ??= 'topkills';
         $this->filters['pilotCount'] ??= 5;
@@ -81,9 +87,9 @@ class TopPilots extends ChartWidget
 
         // Call the appropriate API method based on the selected chart type
         if ($chartType === 'topkills') {
-            $pilotData = DcsServerBotApi::getTopKills($number, $this->serverName);
+            $pilotData = DcsServerBotApi::getTopKills(server_name: $this->serverName, limit: $number);
         } else {
-            $pilotData = DcsServerBotApi::getTopKDR($number, $this->serverName);
+            $pilotData = DcsServerBotApi::getTopKDR(server_name: $this->serverName, limit: $number);
         }
 
         $labels = [];
