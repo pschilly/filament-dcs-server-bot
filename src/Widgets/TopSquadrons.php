@@ -3,7 +3,6 @@
 namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Facades\Http;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class TopSquadrons extends ChartWidget
