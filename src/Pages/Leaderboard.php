@@ -2,19 +2,14 @@
 
 namespace Pschilly\FilamentDcsServerStats\Pages;
 
-use Carbon\CarbonInterval;
 use Filament\Pages\Page;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
-use Filament\Widgets\WidgetConfiguration;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Http;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
-use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 use Pschilly\FilamentDcsServerStats\Widgets;
 
 class Leaderboard extends Page implements HasTable
