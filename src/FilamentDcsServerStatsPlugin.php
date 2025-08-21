@@ -3,6 +3,7 @@
 namespace Pschilly\FilamentDcsServerStats;
 
 use Filament\Contracts\Plugin;
+use Filament\Pages\Page;
 use Filament\Panel;
 use Livewire\Livewire;
 
@@ -72,7 +73,9 @@ class FilamentDcsServerStatsPlugin implements Plugin
     {
         $allPages = [
             Pages\Leaderboard::class,
-            // Add other pages here as needed
+            Pages\PlayerStats::class,
+            Pages\Squadrons::class,
+            Pages\Servers::class,
         ];
 
         $pagesToRegister = $this->pages === [] ? [] : ($this->pages ?? $allPages);
@@ -100,7 +103,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
         if ($this->serverSelector) {
             \Filament\Support\Facades\FilamentView::registerRenderHook(
                 \Filament\View\PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
-                fn (): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
+                fn(): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
             );
         }
     }
