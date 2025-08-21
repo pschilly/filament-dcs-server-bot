@@ -20,6 +20,7 @@ class ServerSelector extends Component
 
         $servers = ['' => 'All Servers']; // Default option for all servers
         $botServers = collect($response)
+            ->sortBy('name') // Sort by name
             ->pluck('name', 'name')
             ->toArray();
         $this->servers = array_merge($servers, $botServers);
