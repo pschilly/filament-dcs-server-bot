@@ -10,7 +10,7 @@ use Filament\Tables\Table;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
-use Pschilly\FilamentDcsServerStats\Widgets;
+use Illuminate\Support\Str;
 
 class Leaderboard extends Page implements HasTable
 {
@@ -30,14 +30,16 @@ class Leaderboard extends Page implements HasTable
     {
         $this->serverName = $serverName;
 
-        $cacheKey = "leaderboard_{$serverName}";
+        $cacheName = Str::slug($serverName);
+        $cacheKey = "lead_$cacheName";
+        logger(['section' => 'serverselect', 'cacheKey' => $cacheKey, 'serverName' => $serverName]);
         $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
             return DcsServerBotApi::getLeaderboard(
                 what: 'kills',
                 order: 'desc',
                 limit: 10000,
                 offset: 0,
-                server_name: $serverName,
+                server_name: $serverName, // <-- use the parameter, not $this->serverName
                 returnType: 'collection'
             );
         });
@@ -48,20 +50,21 @@ class Leaderboard extends Page implements HasTable
         foreach ($this->allRecords as $i => &$item) {
             $item['rank'] = $i + 1;
         }
-
-        $this->dispatch('$refresh');
     }
 
     public function mount()
     {
-        $cacheKey = "leaderboard_{$this->serverName}";
-        $response = Cache::remember($cacheKey, now()->addHours(1), function () {
+        $serverName = $this->serverName ?? '';
+        $cacheName = Str::slug($this->serverName);
+        $cacheKey = "lead_$cacheName";
+        logger(['section' => 'mount', 'cacheKey' => $cacheKey, 'serverName' => $this->serverName]);
+        $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
             return DcsServerBotApi::getLeaderboard(
                 what: 'kills',
                 order: 'desc',
                 limit: 10000,
                 offset: 0,
-                server_name: $this->serverName,
+                server_name: $serverName,
                 returnType: 'collection'
             );
         });
