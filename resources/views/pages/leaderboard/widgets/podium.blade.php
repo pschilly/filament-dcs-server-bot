@@ -1,3 +1,30 @@
+@php
+    // Determine label and value key based on $what
+    $label = 'Kills';
+    $key = 'kills';
+
+    if (isset($what)) {
+        switch ($what) {
+            case 'kills':
+                $label = 'Kills';
+                $key = 'kills';
+                break;
+            case 'deaths':
+                $label = 'Deaths';
+                $key = 'deaths';
+                break;
+            case 'kdr':
+                $label = 'KDR';
+                $key = 'kdr';
+                break;
+            // Add more cases if needed
+            default:
+                $label = ucfirst($what);
+                $key = $what;
+        }
+    }
+@endphp
+
 <div class="mx-auto">
   <div class="flex flex-col sm:flex-row justify-center items-center sm:items-end gap-4 p-6">
     <!-- Second Place (Silver) -->
@@ -7,8 +34,9 @@
                 transform transition duration-300 hover:scale-105">
       <div class="text-5xl">🥈</div>
       <h2 class="mt-6 text-lg font-semibold text-center text-stone-900">{{ $second['nick'] }}</h2>
-      <p class="text-stone-800 text-sm text-center">Viper Squadron</p>
-      <div class="mt-auto text-lg font-bold text-stone-900">{{ $second['kills'] }} Kills!</div>
+      <div class="mt-auto text-lg font-bold text-stone-900 text-center">
+        <span class="text-3xl">{{ round($second[$key],2) ?? 0 }}</span> <br /> {{ $label }}
+      </div>
     </div>
 
     <!-- First Place (Gold) -->
@@ -18,8 +46,9 @@
                 transform transition duration-300 hover:scale-105">
       <div class="text-7xl">🥇</div>
       <h2 class="mt-6 text-xl font-bold text-center text-stone-900">{{ $first['nick'] }}</h2>
-      <p class="text-stone-800 text-sm text-center">Eagle Squadron</p>
-      <div class="mt-auto text-xl font-extrabold text-stone-950">{{ $first['kills'] }} Kills!</div>
+      <div class="mt-auto text-xl font-extrabold text-stone-950 text-center">
+        <span class="text-3xl">{{ round($first[$key],2) ?? 0 }}</span> <br /> {{ $label }}
+      </div>
     </div>
 
     <!-- Third Place (Bronze) -->
@@ -29,8 +58,9 @@
                 transform transition duration-300 hover:scale-105">
       <div class="text-5xl">🥉</div>
       <h2 class="mt-6 text-lg font-semibold text-center text-stone-900">{{ $third['nick'] }}</h2>
-      <p class="text-stone-800 text-sm text-center">Falcon Squadron</p>
-      <div class="mt-auto text-lg font-bold text-stone-900">{{ $third['kills'] }} Kills!</div>
+      <div class="mt-auto text-lg font-bold text-stone-900 text-center">
+        <span class="text-3xl">{{ round($third[$key],2) ?? 0 }}</span> <br /> {{ $label }}
+      </div>
     </div>
   </div>
 </div>

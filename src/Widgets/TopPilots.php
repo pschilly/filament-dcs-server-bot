@@ -31,7 +31,7 @@ class TopPilots extends ChartWidget
     public function mount(): void
     {
         // Ensure filters have default values
-        $this->filters['chartType'] ??= 'topkills';
+        $this->filters['chartType'] ??= 'kills';
         $this->filters['pilotCount'] ??= 5;
     }
 
@@ -48,10 +48,10 @@ class TopPilots extends ChartWidget
             Select::make('chartType')
                 ->label('Show Top')
                 ->options([
-                    'topkills' => 'Top Kills',
-                    'topkdr' => 'Top KDR',
+                    'kills' => 'Top Kills',
+                    'kdr' => 'Top KDR',
                 ])
-                ->default('topkills')
+                ->default('kills')
                 ->live(),
             Select::make('pilotCount')
                 ->label('Show Top')
@@ -68,12 +68,12 @@ class TopPilots extends ChartWidget
 
     public function getHeading(): string
     {
-        $chartType = $this->filters['chartType'] ?? 'topkills';
+        $chartType = $this->filters['chartType'] ?? 'kills';
         $pilotCount = $this->filters['pilotCount'] ?? 5;
 
-        if ($chartType === 'topkills') {
+        if ($chartType === 'kills') {
             return 'Top ' . $pilotCount . ' Pilots by Kills';
-        } elseif ($chartType === 'topkdr') {
+        } elseif ($chartType === 'kdr') {
             return 'Top ' . $pilotCount . ' Pilots by KDR';
         } else {
             return 'Top ' . $pilotCount . ' Pilots';
@@ -83,14 +83,11 @@ class TopPilots extends ChartWidget
     protected function getData(): array
     {
         $number = $this->filters['pilotCount'] ?? 5;
-        $chartType = $this->filters['chartType'] ?? 'topkills';
+        $chartType = $this->filters['chartType'] ?? 'kills';
 
         // Call the appropriate API method based on the selected chart type
-        if ($chartType === 'topkills') {
-            $pilotData = DcsServerBotApi::getTopKills(server_name: $this->serverName, limit: $number);
-        } else {
-            $pilotData = DcsServerBotApi::getTopKDR(server_name: $this->serverName, limit: $number);
-        }
+
+        $pilotData = DcsServerBotApi::getLeaderboard(what: $chartType, server_name: $this->serverName, limit: $number, returnType: 'json')['items'];
 
         $labels = [];
         $kills = [];

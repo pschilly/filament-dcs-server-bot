@@ -4,6 +4,7 @@ namespace Pschilly\FilamentDcsServerStats\Pages;
 
 use Carbon\CarbonInterval;
 use Filament\Pages\Page;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -44,7 +45,7 @@ class Leaderboard extends Page implements HasTable
     public function getHeaderWidgets(): array
     {
         return [
-            Widgets\Leaderboard\Podium::class
+            Widgets\Leaderboard\Podium::class,
         ];
     }
 
@@ -52,14 +53,48 @@ class Leaderboard extends Page implements HasTable
     {
 
         return $table
-            ->records(function (int $page, int $recordsPerPage): LengthAwarePaginator {
+            ->records(function (
+                ?string $sortColumn,
+                ?string $sortDirection,
+                ?string $search,
+                int $page,
+                int $recordsPerPage
+            ): LengthAwarePaginator {
                 $skip = ($page - 1) * $recordsPerPage;
 
-                $response = DcsServerBotApi::getTopKills(server_name: $this->serverName, limit: $recordsPerPage, offset: $skip, returnType: 'collection');
+                $params = [
+                    'limit' => $recordsPerPage,
+                    'skip' => $skip,
+                ];
+
+
+                if ($sortColumn) {
+                    $params['what'] = $sortColumn ?? 'kills';
+                    $params['order'] = $sortDirection ?? 'desc';
+                    $this->dispatch('leaderboardSortColumn', ['column' => $sortColumn, 'direction' => $sortDirection]);
+                } else {
+                    $this->dispatch('leaderboardSortColumn', ['column' => 'kills', 'direction' => 'desc']);
+                }
+
+                if (filled($search)) {
+                    $params['q'] = $search;
+                }
+
+
+                $response = DcsServerBotApi::getLeaderboard(
+                    what: $params['what'] ?? 'kills',
+                    order: $params['order'] ?? 'desc',
+                    query: (isset($params['q']) ? $params['q'] : null),
+                    limit: $params['limit'],
+                    offset: $params['skip'],
+                    server_name: $this->serverName,
+                    returnType: 'collection'
+                );
+
 
                 return new LengthAwarePaginator(
-                    items: $response->toArray(),
-                    total: $response->count(),
+                    items: $response['items'],
+                    total: $response['total_count'],
                     perPage: $recordsPerPage,
                     currentPage: $page
                 );
@@ -69,11 +104,15 @@ class Leaderboard extends Page implements HasTable
                     ->rowIndex()
                     ->label('No.')
                     ->view('filament-dcs-server-stats::tables.columns.leaderboard-row-number'),
-                TextColumn::make('nick')->label('Callsign'),
-                TextColumn::make('kills')->label('Kills'),
-                TextColumn::make('deaths')->label('Deaths'),
-                TextColumn::make('kdr')->label('KDR')->numeric(2),
+                TextColumn::make('nick')->label('Callsign')->searchable(),
+                TextColumn::make('kills')->label('Kills')->sortable(),
+                TextColumn::make('deaths')->label('Deaths')->sortable(),
+                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
 
-            ]);
+            ])
+            ->striped()
+            ->searchable()
+            ->persistSortInSession()
+            ->defaultSort('kills', direction: 'desc');
     }
 }

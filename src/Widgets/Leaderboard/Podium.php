@@ -13,14 +13,23 @@ class Podium extends Widget
     public $third;
 
     public $serverName = null;
+    public $what = 'deaths';
+    public $order = 'asc';
 
     protected $listeners = [
         'serverSelected' => 'handleServerSelected',
+        'leaderboardSortColumn' => 'handleLeaderboardSortColumn',
     ];
 
     public function handleServerSelected($serverName)
     {
         $this->serverName = $serverName;
+        $this->updatePodium();
+    }
+    public function handleLeaderboardSortColumn($sort)
+    {
+        $this->what = $sort['column'];
+        $this->order = $sort['direction'];
         $this->updatePodium();
     }
 
@@ -35,7 +44,7 @@ class Podium extends Widget
 
     public function updatePodium()
     {
-        $apiResponse = \Pschilly\DcsServerBotApi\DcsServerBotApi::getTopKills(server_name: $this->serverName, limit: 3);
+        $apiResponse = DcsServerBotApi::getLeaderboard(what: $this->what, order: $this->order, server_name: $this->serverName)['items'];
 
         $response = [];
         if (is_array($apiResponse)) {

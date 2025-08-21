@@ -1,11 +1,11 @@
 @php
     $icons = [
-        1 => '<span style="color:gold;">&#x1F947;</span>',
-        2 => '<span style="color:silver;">&#x1F948;</span>',
-        3 => '<span style="color:#cd7f32;">&#x1F949;</span>',
+        1 => '<span class="text-3xl">&#x1F947;</span>',
+        2 => '<span class="text-2xl">&#x1F948;</span>',
+        3 => '<span class="text-xl">&#x1F949;</span>',
     ];
     $rowNumber = ($getState() ?? 0);
 @endphp
-<span>
+<span class="font-bold">
     {!! $icons[$rowNumber] ?? $rowNumber !!}
 </span>
