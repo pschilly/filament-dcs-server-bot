@@ -9,6 +9,7 @@ use Pschilly\DcsServerBotApi\DcsServerBotApi;
 class ServerSelector extends Component
 {
     public $servers = [];
+
     public $selectedServer = '';
 
     public function mount()

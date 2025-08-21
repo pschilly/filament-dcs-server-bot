@@ -10,8 +10,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Pschilly\DcsServerBotApi\DcsServerBotApi;
 use Illuminate\Support\Str;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class Leaderboard extends Page implements HasTable
 {
@@ -156,10 +156,10 @@ class Leaderboard extends Page implements HasTable
             ->values();
 
         return [
-            'first'  => $ranked->get(0),
+            'first' => $ranked->get(0),
             'second' => $ranked->get(1),
-            'third'  => $ranked->get(2),
-            'what'   => $sortColumn,
+            'third' => $ranked->get(2),
+            'what' => $sortColumn,
         ];
     }
 }
