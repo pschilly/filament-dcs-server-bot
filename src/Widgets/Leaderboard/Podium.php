@@ -3,6 +3,7 @@
 namespace Pschilly\FilamentDcsServerStats\Widgets\Leaderboard;
 
 use Filament\Widgets\Widget;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class Podium extends Widget
 {

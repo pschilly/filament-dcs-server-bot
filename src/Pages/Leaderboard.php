@@ -95,8 +95,7 @@ class Leaderboard extends Page implements HasTable
                 );
             })
             ->columns([
-                TextColumn::make('index')
-                    ->rowIndex()
+                TextColumn::make('row_num')
                     ->label('No.')
                     ->view('filament-dcs-server-stats::tables.columns.leaderboard-row-number'),
                 TextColumn::make('nick')->label('Callsign')->searchable(),
