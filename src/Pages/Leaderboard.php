@@ -8,6 +8,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
 use Pschilly\FilamentDcsServerStats\Widgets;
 
@@ -29,14 +30,18 @@ class Leaderboard extends Page implements HasTable
     {
         $this->serverName = $serverName;
 
-        $response = DcsServerBotApi::getLeaderboard(
-            what: 'kills',
-            order: 'desc',
-            limit: 10000,
-            offset: 0,
-            server_name: $this->serverName,
-            returnType: 'collection'
-        );
+        $cacheKey = "leaderboard_{$serverName}";
+        $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
+            return DcsServerBotApi::getLeaderboard(
+                what: 'kills',
+                order: 'desc',
+                limit: 10000,
+                offset: 0,
+                server_name: $serverName,
+                returnType: 'collection'
+            );
+        });
+
         $this->allRecords = $response['items'] ?? [];
 
         // Assign absolute rank
@@ -49,14 +54,18 @@ class Leaderboard extends Page implements HasTable
 
     public function mount()
     {
-        $response = DcsServerBotApi::getLeaderboard(
-            what: 'kills',
-            order: 'desc',
-            limit: 10000,
-            offset: 0,
-            server_name: $this->serverName,
-            returnType: 'collection'
-        );
+        $cacheKey = "leaderboard_{$this->serverName}";
+        $response = Cache::remember($cacheKey, now()->addHours(1), function () {
+            return DcsServerBotApi::getLeaderboard(
+                what: 'kills',
+                order: 'desc',
+                limit: 10000,
+                offset: 0,
+                server_name: $this->serverName,
+                returnType: 'collection'
+            );
+        });
+
         $this->allRecords = $response['items'] ?? [];
 
         // Assign absolute rank
@@ -76,34 +85,31 @@ class Leaderboard extends Page implements HasTable
                 int $page,
                 int $recordsPerPage
             ): LengthAwarePaginator {
-                $sortBy = $sortColumn ?? 'kills';
+                $filtered = collect($this->allRecords);
 
-                // 1. Sort all records DESC and assign rank
-                $ranked = collect($this->allRecords)
-                    ->sortByDesc($sortBy)
-                    ->values()
-                    ->map(function ($item, $i) {
-                        $item['rank'] = $i + 1;
-                        return $item;
-                    });
-
-                // 2. Filter for search, but keep original rank
+                // Search in PHP
                 if (filled($search)) {
-                    $ranked = $ranked->filter(
+                    $filtered = $filtered->filter(
                         fn($item) => str_contains(strtolower($item['nick']), strtolower($search))
-                    )->values();
+                    );
                 }
 
-                // 3. Sort for display (user's choice)
-                if ($sortColumn && $sortDirection === 'asc') {
-                    $ranked = $ranked->sortBy($sortColumn)->values();
-                } elseif ($sortColumn && $sortDirection === 'desc') {
-                    $ranked = $ranked->sortByDesc($sortColumn)->values();
+                // Sort
+                if ($sortColumn) {
+                    $filtered = $sortDirection === 'desc'
+                        ? $filtered->sortByDesc($sortColumn)
+                        : $filtered->sortBy($sortColumn);
                 }
 
-                // 4. Paginate
-                $total = $ranked->count();
-                $items = $ranked->slice(($page - 1) * $recordsPerPage, $recordsPerPage)->values()->all();
+                // Assign rank after sorting
+                $filtered = $filtered->values()->map(function ($item, $i) {
+                    $item['rank'] = $i + 1;
+                    return $item;
+                });
+
+                // Paginate
+                $total = $filtered->count();
+                $items = $filtered->slice(($page - 1) * $recordsPerPage, $recordsPerPage)->values()->all();
 
                 return new \Illuminate\Pagination\LengthAwarePaginator(
                     $items,
