@@ -9,8 +9,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Pschilly\DcsServerBotApi\DcsServerBotApi;
 use Illuminate\Support\Str;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class Leaderboard extends Page implements HasTable
 {
@@ -93,7 +93,7 @@ class Leaderboard extends Page implements HasTable
                 // Search in PHP
                 if (filled($search)) {
                     $filtered = $filtered->filter(
-                        fn($item) => str_contains(strtolower($item['nick']), strtolower($search))
+                        fn ($item) => str_contains(strtolower($item['nick']), strtolower($search))
                     );
                 }
 
@@ -107,6 +107,7 @@ class Leaderboard extends Page implements HasTable
                 // Assign rank after sorting
                 $filtered = $filtered->values()->map(function ($item, $i) {
                     $item['rank'] = $i + 1;
+
                     return $item;
                 });
 
@@ -128,7 +129,7 @@ class Leaderboard extends Page implements HasTable
                 TextColumn::make('nick')->label('Callsign')->searchable(),
                 TextColumn::make('kills')->label('Kills')->sortable(),
                 TextColumn::make('deaths')->label('Deaths')->sortable(),
-                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable()
+                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
 
             ])
             ->striped()
@@ -147,10 +148,10 @@ class Leaderboard extends Page implements HasTable
             ->values();
 
         return [
-            'first'  => $ranked->get(0),
+            'first' => $ranked->get(0),
             'second' => $ranked->get(1),
-            'third'  => $ranked->get(2),
-            'what'   => $sortColumn,
+            'third' => $ranked->get(2),
+            'what' => $sortColumn,
         ];
     }
 }
