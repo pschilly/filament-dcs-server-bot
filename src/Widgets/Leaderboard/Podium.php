@@ -14,7 +14,9 @@ class Podium extends Widget
     public $third;
 
     public $serverName = null;
+
     public $what = 'deaths';
+
     public $order = 'asc';
 
     protected $listeners = [
@@ -27,13 +29,13 @@ class Podium extends Widget
         $this->serverName = $serverName;
         $this->updatePodium();
     }
+
     public function handleLeaderboardSortColumn($sort)
     {
         $this->what = $sort['column'];
         $this->order = $sort['direction'];
         $this->updatePodium();
     }
-
 
     protected string $view = 'filament-dcs-server-stats::pages.leaderboard.widgets.podium';
 

@@ -3,7 +3,6 @@
 namespace Pschilly\FilamentDcsServerStats\Pages;
 
 use Filament\Pages\Page;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -62,7 +61,6 @@ class Leaderboard extends Page implements HasTable
                     'skip' => $skip,
                 ];
 
-
                 if ($sortColumn) {
                     $params['what'] = $sortColumn ?? 'kills';
                     $params['order'] = $sortDirection ?? 'desc';
@@ -75,7 +73,6 @@ class Leaderboard extends Page implements HasTable
                     $params['q'] = $search;
                 }
 
-
                 $response = DcsServerBotApi::getLeaderboard(
                     what: $params['what'] ?? 'kills',
                     order: $params['order'] ?? 'desc',
@@ -85,7 +82,6 @@ class Leaderboard extends Page implements HasTable
                     server_name: $this->serverName,
                     returnType: 'collection'
                 );
-
 
                 return new LengthAwarePaginator(
                     items: $response['items'],
