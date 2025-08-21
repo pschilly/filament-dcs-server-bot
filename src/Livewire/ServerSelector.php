@@ -2,18 +2,21 @@
 
 namespace Pschilly\FilamentDcsServerStats\Livewire;
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class ServerSelector extends Component
 {
     public $servers = [];
-
     public $selectedServer = '';
 
     public function mount()
     {
-        $response = Http::baseUrl('http://192.168.50.143:9876')->get('/servers')->json();
+        $cacheKey = 'dcs_server_list';
+        $response = Cache::remember($cacheKey, now()->addHours(6), function () {
+            return DcsServerBotApi::getServerList();
+        });
 
         $servers = ['' => 'All Servers']; // Default option for all servers
         $botServers = collect($response)
