@@ -19,6 +19,8 @@ class Leaderboard extends Page implements HasTable
 
     public $serverName = null;
 
+    public array $allRecords = [];
+
     protected $listeners = [
         'serverSelected' => 'handleServerSelected',
     ];
@@ -26,21 +28,41 @@ class Leaderboard extends Page implements HasTable
     public function handleServerSelected($serverName)
     {
         $this->serverName = $serverName;
-        // If your chart uses polling, it will update automatically.
-        // Otherwise, you may need to trigger a refresh:
+
+        $response = DcsServerBotApi::getLeaderboard(
+            what: 'kills',
+            order: 'desc',
+            limit: 10000,
+            offset: 0,
+            server_name: $this->serverName,
+            returnType: 'collection'
+        );
+        $this->allRecords = $response['items'] ?? [];
+
+        // Assign absolute rank
+        foreach ($this->allRecords as $i => &$item) {
+            $item['rank'] = $i + 1;
+        }
+
         $this->dispatch('$refresh');
     }
 
-    public function getHeaderWidgetsColumns(): int | array
+    public function mount()
     {
-        return 1;
-    }
+        $response = DcsServerBotApi::getLeaderboard(
+            what: 'kills',
+            order: 'desc',
+            limit: 10000,
+            offset: 0,
+            server_name: $this->serverName,
+            returnType: 'collection'
+        );
+        $this->allRecords = $response['items'] ?? [];
 
-    public function getHeaderWidgets(): array
-    {
-        return [
-            Widgets\Leaderboard\Podium::class,
-        ];
+        // Assign absolute rank
+        foreach ($this->allRecords as $i => &$item) {
+            $item['rank'] = $i + 1;
+        }
     }
 
     public function table(Table $table): Table
@@ -54,55 +76,72 @@ class Leaderboard extends Page implements HasTable
                 int $page,
                 int $recordsPerPage
             ): LengthAwarePaginator {
-                $skip = ($page - 1) * $recordsPerPage;
+                $sortBy = $sortColumn ?? 'kills';
 
-                $params = [
-                    'limit' => $recordsPerPage,
-                    'skip' => $skip,
-                ];
+                // 1. Sort all records DESC and assign rank
+                $ranked = collect($this->allRecords)
+                    ->sortByDesc($sortBy)
+                    ->values()
+                    ->map(function ($item, $i) {
+                        $item['rank'] = $i + 1;
+                        return $item;
+                    });
 
-                if ($sortColumn) {
-                    $params['what'] = $sortColumn ?? 'kills';
-                    $params['order'] = $sortDirection ?? 'desc';
-                    $this->dispatch('leaderboardSortColumn', ['column' => $sortColumn, 'direction' => $sortDirection]);
-                } else {
-                    $this->dispatch('leaderboardSortColumn', ['column' => 'kills', 'direction' => 'desc']);
-                }
-
+                // 2. Filter for search, but keep original rank
                 if (filled($search)) {
-                    $params['q'] = $search;
+                    $ranked = $ranked->filter(
+                        fn($item) => str_contains(strtolower($item['nick']), strtolower($search))
+                    )->values();
                 }
 
-                $response = DcsServerBotApi::getLeaderboard(
-                    what: $params['what'] ?? 'kills',
-                    order: $params['order'] ?? 'desc',
-                    query: (isset($params['q']) ? $params['q'] : null),
-                    limit: $params['limit'],
-                    offset: $params['skip'],
-                    server_name: $this->serverName,
-                    returnType: 'collection'
-                );
+                // 3. Sort for display (user's choice)
+                if ($sortColumn && $sortDirection === 'asc') {
+                    $ranked = $ranked->sortBy($sortColumn)->values();
+                } elseif ($sortColumn && $sortDirection === 'desc') {
+                    $ranked = $ranked->sortByDesc($sortColumn)->values();
+                }
 
-                return new LengthAwarePaginator(
-                    items: $response['items'],
-                    total: $response['total_count'],
-                    perPage: $recordsPerPage,
-                    currentPage: $page
+                // 4. Paginate
+                $total = $ranked->count();
+                $items = $ranked->slice(($page - 1) * $recordsPerPage, $recordsPerPage)->values()->all();
+
+                return new \Illuminate\Pagination\LengthAwarePaginator(
+                    $items,
+                    $total,
+                    $recordsPerPage,
+                    $page
                 );
             })
             ->columns([
-                TextColumn::make('row_num')
+                TextColumn::make('rank')
                     ->label('No.')
                     ->view('filament-dcs-server-stats::tables.columns.leaderboard-row-number'),
                 TextColumn::make('nick')->label('Callsign')->searchable(),
                 TextColumn::make('kills')->label('Kills')->sortable(),
                 TextColumn::make('deaths')->label('Deaths')->sortable(),
-                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
+                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable()
 
             ])
             ->striped()
             ->searchable()
             ->persistSortInSession()
             ->defaultSort('kills', direction: 'desc');
+    }
+
+    public function getPodiumData(): array
+    {
+        $sortColumn = $this->table->getSortColumn() ?? 'kills';
+
+        // Always sort all records DESC for podium
+        $ranked = collect($this->allRecords)
+            ->sortByDesc($sortColumn)
+            ->values();
+
+        return [
+            'first'  => $ranked->get(0),
+            'second' => $ranked->get(1),
+            'third'  => $ranked->get(2),
+            'what'   => $sortColumn,
+        ];
     }
 }
