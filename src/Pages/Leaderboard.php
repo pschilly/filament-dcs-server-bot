@@ -2,6 +2,7 @@
 
 namespace Pschilly\FilamentDcsServerStats\Pages;
 
+use Carbon\CarbonInterval;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -88,29 +89,35 @@ class Leaderboard extends Page implements HasTable
                 int $page,
                 int $recordsPerPage
             ): LengthAwarePaginator {
-                $filtered = collect($this->allRecords);
+                $sortBy = $sortColumn ?? 'kills';
 
-                // Search in PHP
+                // 1) Create a global ranking based on DESC of the selected column
+                $globalRanked = collect($this->allRecords)
+                    ->sortByDesc($sortBy)
+                    ->values()
+                    ->map(function ($item, $i) {
+                        $item['rank'] = $i + 1; // absolute rank (1 = highest)
+                        return $item;
+                    });
+
+                // 2) For the table, start from the ranked collection
+                $filtered = $globalRanked;
+
+                // 3) Apply search (do NOT reassign rank)
                 if (filled($search)) {
                     $filtered = $filtered->filter(
                         fn($item) => str_contains(strtolower($item['nick']), strtolower($search))
-                    );
+                    )->values();
                 }
 
-                // Sort
+                // 4) Apply display sort as the user requested (but keep absolute rank)
                 if ($sortColumn) {
                     $filtered = $sortDirection === 'desc'
-                        ? $filtered->sortByDesc($sortColumn)
-                        : $filtered->sortBy($sortColumn);
+                        ? $filtered->sortByDesc($sortColumn)->values()
+                        : $filtered->sortBy($sortColumn)->values();
                 }
 
-                // Assign rank after sorting
-                $filtered = $filtered->values()->map(function ($item, $i) {
-                    $item['rank'] = $i + 1;
-                    return $item;
-                });
-
-                // Paginate
+                // 5) Paginate the filtered / display-sorted collection
                 $total = $filtered->count();
                 $items = $filtered->slice(($page - 1) * $recordsPerPage, $recordsPerPage)->values()->all();
 
@@ -128,7 +135,9 @@ class Leaderboard extends Page implements HasTable
                 TextColumn::make('nick')->label('Callsign')->searchable(),
                 TextColumn::make('kills')->label('Kills')->sortable(),
                 TextColumn::make('deaths')->label('Deaths')->sortable(),
-                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable()
+                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
+                TextColumn::make('credits')->label('Credits')->sortable(),
+                TextColumn::make('playtime')->label('Play Time')->formatStateUsing(fn($state) => CarbonInterval::seconds(round($state / 60) * 60)->cascade()->forHumans())->sortable()
 
             ])
             ->striped()
