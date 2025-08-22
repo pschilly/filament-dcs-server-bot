@@ -103,7 +103,7 @@ class FilamentDcsServerStatsPlugin implements Plugin
         if ($this->serverSelector) {
             \Filament\Support\Facades\FilamentView::registerRenderHook(
                 \Filament\View\PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
-                fn(): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@livewire(\'serverselector\')'),
             );
         }
     }

@@ -5,7 +5,6 @@ namespace Pschilly\FilamentDcsServerStats\Pages;
 use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\TextInput;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
@@ -20,7 +19,9 @@ class PlayerStats extends Page implements HasForms
 
     // form state / results
     public string $nick = '';
+
     public array $playerData = [];
+
     public bool $showForm = true;
 
     protected $listeners = [
@@ -70,13 +71,14 @@ class PlayerStats extends Page implements HasForms
                         }
 
                         return collect($results)
-                            ->mapWithKeys(fn($item) => [
-                                (string) ($item['nick'] ?? $item[0] ?? '') => (string) ($item['nick'] ?? $item[0] ?? '')
+                            ->mapWithKeys(fn ($item) => [
+                                (string) ($item['nick'] ?? $item[0] ?? '') => (string) ($item['nick'] ?? $item[0] ?? ''),
                             ])
-                            ->filter(fn($label, $value) => $value !== '')
+                            ->filter(fn ($label, $value) => $value !== '')
                             ->toArray();
                     } catch (\Throwable $e) {
                         logger()->error('Player search failed', ['query' => $search, 'error' => $e->getMessage()]);
+
                         return [];
                     }
                 }),
@@ -98,6 +100,7 @@ class PlayerStats extends Page implements HasForms
 
         if ($this->nick === '') {
             $this->dispatch('notify', ['type' => 'warning', 'message' => 'Enter a player callsign.']);
+
             return;
         }
 
@@ -192,7 +195,7 @@ class PlayerStats extends Page implements HasForms
                 ->label('Change Player')
                 ->action('clearSelection')
                 ->icon(Heroicon::ChevronDoubleLeft)
-                ->visible(fn(): bool => !$this->showForm),
+                ->visible(fn (): bool => ! $this->showForm),
         ];
     }
 }
