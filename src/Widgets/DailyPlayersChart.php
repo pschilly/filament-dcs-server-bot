@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
 use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class DailyPlayersChart extends ChartWidget
 {
@@ -25,7 +27,13 @@ class DailyPlayersChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = DcsServerBotApi::getServerStats($this->serverName);
+        $serverName = $this->serverName;
+        $cacheName = Str::slug($serverName) . '_serverStatistics';
+        $cacheKey = "dcsstats_$cacheName";
+
+        $data = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
+            return DcsServerBotApi::getServerStats($serverName);
+        });
 
         $labels = [];
         $values = [];

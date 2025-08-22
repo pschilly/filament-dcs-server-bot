@@ -7,6 +7,8 @@ use Filament\Schemas\Schema;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class TopPilots extends ChartWidget
 {
@@ -84,8 +86,21 @@ class TopPilots extends ChartWidget
         $chartType = $this->filters['chartType'] ?? 'kills';
 
         // Call the appropriate API method based on the selected chart type
+        $serverName = $this->serverName;
 
-        $pilotData = DcsServerBotApi::getLeaderboard(what: $chartType, server_name: $this->serverName, limit: $number, returnType: 'json')['items'];
+        $cacheName = Str::slug($serverName);
+        $cacheKey = "leaderboard_$cacheName";
+        $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName, $chartType) {
+            return DcsServerBotApi::getLeaderboard(
+                what: $chartType,
+                order: 'desc',
+                limit: 10,
+                server_name: $serverName, // <-- use the parameter, not $this->serverName
+                returnType: 'json'
+            );
+        });
+
+        $pilotData = $response['items'];
 
         $labels = [];
         $kills = [];

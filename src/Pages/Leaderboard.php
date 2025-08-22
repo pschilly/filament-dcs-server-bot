@@ -32,7 +32,7 @@ class Leaderboard extends Page implements HasTable
         $this->serverName = $serverName;
 
         $cacheName = Str::slug($serverName);
-        $cacheKey = "lead_$cacheName";
+        $cacheKey = "leaderboard_$cacheName";
         logger(['section' => 'serverselect', 'cacheKey' => $cacheKey, 'serverName' => $serverName]);
         $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
             return DcsServerBotApi::getLeaderboard(
@@ -107,7 +107,7 @@ class Leaderboard extends Page implements HasTable
                 // 3) Apply search (do NOT reassign rank)
                 if (filled($search)) {
                     $filtered = $filtered->filter(
-                        fn ($item) => str_contains(strtolower($item['nick']), strtolower($search))
+                        fn($item) => str_contains(strtolower($item['nick']), strtolower($search))
                     )->values();
                 }
 
@@ -138,7 +138,7 @@ class Leaderboard extends Page implements HasTable
                 TextColumn::make('deaths')->label('Deaths')->sortable(),
                 TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
                 TextColumn::make('credits')->label('Credits')->sortable(),
-                TextColumn::make('playtime')->label('Play Time')->formatStateUsing(fn ($state) => CarbonInterval::seconds(round($state / 60) * 60)->cascade()->forHumans())->sortable(),
+                TextColumn::make('playtime')->label('Play Time')->formatStateUsing(fn($state) => CarbonInterval::seconds(round($state / 60) * 60)->cascade()->forHumans())->sortable(),
 
             ])
             ->striped()

@@ -4,6 +4,8 @@ namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class TopSquadrons extends ChartWidget
 {
@@ -32,7 +34,8 @@ class TopSquadrons extends ChartWidget
         $activeFilter = (int) $this->filter;
 
         // Get all squadrons
-        $squadrons = DcsServerBotApi::getSquadronList();
+        $cacheKey = "dcsstats_squadrons";
+        $squadrons = Cache::remember($cacheKey, now()->addHours(1), fn() => DcsServerBotApi::getSquadronList());
 
         $squadronCredits = [];
 
@@ -43,7 +46,8 @@ class TopSquadrons extends ChartWidget
                 continue;
             }
 
-            $creditsResponse = DcsServerBotApi::getSquadronCredits($name);
+            $sqnCreditscacheKey = "dcsstats_squadron_credits_" . Str::slug($name);
+            $creditsResponse = Cache::remember($sqnCreditscacheKey, now()->addHours(1), fn() => DcsServerBotApi::getSquadronCredits($name));
             $credits = $creditsResponse['credits'] ?? 0;
             $squadronCredits[$name] = $credits;
         }

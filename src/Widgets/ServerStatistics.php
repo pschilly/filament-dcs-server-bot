@@ -7,6 +7,8 @@ use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class ServerStatistics extends StatsOverviewWidget
 {
@@ -32,7 +34,13 @@ class ServerStatistics extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $data = DcsServerBotApi::getServerStats($this->serverName);
+        $serverName = $this->serverName;
+        $cacheName = Str::slug($serverName) . '_serverStatistics';
+        $cacheKey = "dcsstats_$cacheName";
+
+        $data = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
+            return DcsServerBotApi::getServerStats($serverName);
+        });
 
         $dailyPlayers = [];
         foreach ($data['daily_players'] as $players) {
