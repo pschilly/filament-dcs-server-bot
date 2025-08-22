@@ -4,10 +4,10 @@ namespace Pschilly\FilamentDcsServerStats\Widgets;
 
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
-use Pschilly\DcsServerBotApi\DcsServerBotApi;
-use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
+use Pschilly\FilamentDcsServerStats\Traits\ServerSpecificResults;
 
 class DailyPlayersChart extends ChartWidget
 {

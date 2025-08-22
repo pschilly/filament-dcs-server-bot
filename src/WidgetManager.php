@@ -29,7 +29,7 @@ class WidgetManager
         // Leaderboard Widgets
         Widgets\Leaderboard\Podium::class,
 
-        //Player Stats Widgets
+        // Player Stats Widgets
 
     ];
 

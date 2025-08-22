@@ -10,18 +10,21 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Pschilly\DcsServerBotApi\DcsServerBotApi;
-use Pschilly\FilamentDcsServerStats\Widgets;
 
 class PlayerStats extends Page implements HasForms
 {
     use InteractsWithForms;
+
     protected static BackedEnum | string | null $navigationIcon = Heroicon::ChartBar;
+
     protected string $view = 'filament-dcs-server-stats::pages.playerstats.index';
 
     public ?string $serverName = null;
 
     public array $playerData = [];
+
     public bool $showForm = true;
+
     public string $activeTab = 'tab1';
 
     // form state / results
@@ -40,7 +43,7 @@ class PlayerStats extends Page implements HasForms
 
     public function restorePlayerFromSession(string $nick): void
     {
-        if (!is_string($nick) || trim($nick) === '') {
+        if (! is_string($nick) || trim($nick) === '') {
             return;
         }
         $this->loadPlayer($nick);
@@ -77,13 +80,14 @@ class PlayerStats extends Page implements HasForms
                         }
 
                         return collect($results)
-                            ->mapWithKeys(fn($item) => [
-                                (string) ($item['nick'] ?? $item[0] ?? '') => (string) ($item['nick'] ?? $item[0] ?? '')
+                            ->mapWithKeys(fn ($item) => [
+                                (string) ($item['nick'] ?? $item[0] ?? '') => (string) ($item['nick'] ?? $item[0] ?? ''),
                             ])
-                            ->filter(fn($label, $value) => $value !== '')
+                            ->filter(fn ($label, $value) => $value !== '')
                             ->toArray();
                     } catch (\Throwable $e) {
                         logger()->error('Player search failed', ['query' => $search, 'error' => $e->getMessage()]);
+
                         return [];
                     }
                 }),
@@ -105,6 +109,7 @@ class PlayerStats extends Page implements HasForms
 
         if ($this->nick === '') {
             $this->dispatch('notify', ['type' => 'warning', 'message' => 'Enter a player callsign.']);
+
             return;
         }
 
@@ -145,7 +150,6 @@ class PlayerStats extends Page implements HasForms
             $result = DcsServerBotApi::getUser($identifier);
 
             $this->playerData = DcsServerBotApi::getPlayerInfo($this->serverName, $result[0]['nick'], $result[0]['date']);
-
 
             // sync form and state
             $this->nick = $identifier;
@@ -191,7 +195,6 @@ class PlayerStats extends Page implements HasForms
         return 'Select a player...';
     }
 
-
     // Add a header action for "Change Player"
     protected function getHeaderActions(): array
     {
@@ -200,7 +203,7 @@ class PlayerStats extends Page implements HasForms
                 ->label('Change Player')
                 ->action('clearSelection')
                 ->icon(Heroicon::ChevronDoubleLeft)
-                ->visible(fn(): bool => !$this->showForm),
+                ->visible(fn (): bool => ! $this->showForm),
         ];
     }
 }
