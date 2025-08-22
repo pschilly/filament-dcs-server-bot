@@ -28,6 +28,9 @@ class WidgetManager
         Widgets\ServerStatistics::class,
         // Leaderboard Widgets
         Widgets\Leaderboard\Podium::class,
+
+        //Player Stats Widgets
+
     ];
 
     public static function make(): static

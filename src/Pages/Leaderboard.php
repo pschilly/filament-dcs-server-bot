@@ -2,8 +2,10 @@
 
 namespace Pschilly\FilamentDcsServerStats\Pages;
 
+use BackedEnum;
 use Carbon\CarbonInterval;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -16,6 +18,8 @@ use Pschilly\DcsServerBotApi\DcsServerBotApi;
 class Leaderboard extends Page implements HasTable
 {
     use InteractsWithTable;
+
+    protected static BackedEnum | string | null $navigationIcon = Heroicon::Trophy;
 
     protected string $view = 'filament-dcs-server-stats::pages.leaderboard.index';
 
