@@ -6,9 +6,9 @@ use Carbon\CarbonInterval;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Pschilly\DcsServerBotApi\DcsServerBotApi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class ServerStatistics extends StatsOverviewWidget
 {

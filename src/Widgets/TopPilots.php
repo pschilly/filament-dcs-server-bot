@@ -6,9 +6,9 @@ use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\ChartWidget\Concerns\HasFiltersSchema;
-use Pschilly\DcsServerBotApi\DcsServerBotApi;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class TopPilots extends ChartWidget
 {
