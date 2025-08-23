@@ -35,12 +35,12 @@ class PvpChart extends ChartWidget
                     'backgroundColor' => [
                         'rgba(59, 130, 246, 0.5)', // Deaths
                         'rgba(239, 68, 68, 0.5)', // KDR
-                        'rgba(245, 158, 66, 0.5)' // Warning
+                        'rgba(245, 158, 66, 0.5)', // Warning
                     ],
                     'borderColor' => [
                         'rgba(59, 130, 246, 1)',
                         'rgba(239, 68, 68, 1)',
-                        'rgba(245, 158, 66, 1)'
+                        'rgba(245, 158, 66, 1)',
                     ],
                 ],
             ],
