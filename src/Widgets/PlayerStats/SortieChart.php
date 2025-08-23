@@ -28,15 +28,25 @@ class SortieChart extends ChartWidget
 
     public ?string $selectedModule = null;
 
+    public function getFilters(): array
+    {
+        return [
+            'overall' => 'All Time',
+            'last_session' => 'Last Session'
+        ];
+    }
+
     protected function getData(): array
     {
-        $playtimeSeconds = $this->playerData['playtime'] ?? 0;
+        $scope = $this->filter ?? 'overall';
+
+        $playtimeSeconds = $this->playerData[$scope]['playtime'] ?? 0;
         $playtimeHours = round(CarbonInterval::seconds($playtimeSeconds)->totalHours);
 
-        $takeoffs = $this->playerData['takeoffs'] ?? 0;
-        $landings = $this->playerData['landings'] ?? 0;
-        $ejections = $this->playerData['ejections'] ?? 0;
-        $crashes = $this->playerData['crashes'] ?? 0;
+        $takeoffs = $this->playerData[$scope]['takeoffs'] ?? 0;
+        $landings = $this->playerData[$scope]['landings'] ?? 0;
+        $ejections = $this->playerData[$scope]['ejections'] ?? 0;
+        $crashes = $this->playerData[$scope]['crashes'] ?? 0;
 
         return [
             'labels' => [

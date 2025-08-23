@@ -27,11 +27,21 @@ class PvpChart extends ChartWidget
 
     public ?string $selectedModule = null;
 
+
+    public function getFilters(): array
+    {
+        return [
+            'overall' => 'All Time',
+            'last_session' => 'Last Session'
+        ];
+    }
+
     protected function getData(): array
     {
-        $kills = $this->playerData['kills_pvp'] ?? 0;
-        $deaths = $this->playerData['deaths_pvp'] ?? 0;
-        $kdr = $this->playerData['kdr_pvp'] ?? 0;
+        $scope = $this->filter ?? 'overall';
+        $kills = $this->playerData[$scope]['kills_pvp'] ?? 0;
+        $deaths = $this->playerData[$scope]['deaths_pvp'] ?? 0;
+        $kdr = $this->playerData[$scope]['kdr_pvp'] ?? 0;
 
         return [
             'labels' => ['Kills (PvP)', 'Deaths (PvP)', 'KDR (PvP)'],

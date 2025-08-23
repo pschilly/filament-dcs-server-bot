@@ -22,30 +22,39 @@ class PveChart extends ChartWidget
 
     public ?string $selectedModule = null;
 
+
+    public function getFilters(): array
+    {
+        return [
+            'overall' => 'All Time',
+            'last_session' => 'Last Session'
+        ];
+    }
+
     protected function getData(): array
     {
-        $kills = $this->playerData['kills'] ?? 0;
-        $deaths = $this->playerData['deaths'] ?? 0;
-        $kdr = $this->playerData['kdr'] ?? 0;
-        $teamkills = $this->playerData['teamkills'] ?? 0;
+        $scope = $this->filter ?? 'overall';
+        $kills = $this->playerData[$scope]['kills'] ?? 0;
+        $deaths = $this->playerData[$scope]['deaths'] ?? 0;
+        $kdr = $this->playerData[$scope]['kdr'] ?? 0;
 
         return [
-            'labels' => ['Kills (PvE)', 'Deaths (PvE)', 'KDR (PvE)', 'Teamkills'],
+            'labels' => ['Kills (PvE)', 'Deaths (PvE)', 'KDR (PvE)'],
             'datasets' => [
                 [
                     'label' => 'PVP Stats',
-                    'data' => [$kills, $deaths, $kdr, $teamkills],
+                    'data' => [$kills, $deaths, $kdr],
                     'backgroundColor' => [
                         'rgba(59, 130, 246, 0.5)', // Deaths
                         'rgba(239, 68, 68, 0.5)', // KDR
                         'rgba(245, 158, 66, 0.5)', // Warning
-                        'rgba(182, 245, 66, 0.5)', // Teamkills
+
                     ],
                     'borderColor' => [
                         'rgba(59, 130, 246, 1)',
                         'rgba(239, 68, 68, 1)',
                         'rgba(245, 158, 66, 1)',
-                        'rgba(182, 245, 66, 1)',
+
                     ],
                 ],
             ],
