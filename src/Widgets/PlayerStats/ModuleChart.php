@@ -38,12 +38,12 @@ class ModuleChart extends ChartWidget
         $selectedModule = $this->filter ?? null;
 
         // If no module selected, use the first module
-        if (!$selectedModule && count($stats)) {
+        if (! $selectedModule && count($stats)) {
             $selectedModule = $stats[0]['module'] ?? null;
         }
 
         if ($selectedModule) {
-            $stat = collect($stats)->first(fn($stat) => ($stat['module'] ?? '') === $selectedModule);
+            $stat = collect($stats)->first(fn ($stat) => ($stat['module'] ?? '') === $selectedModule);
 
             if ($stat) {
                 return [
@@ -58,12 +58,12 @@ class ModuleChart extends ChartWidget
                             'backgroundColor' => [
                                 'rgba(59, 130, 246, 0.5)', // Deaths
                                 'rgba(239, 68, 68, 0.5)', // KDR
-                                'rgba(245, 158, 66, 0.5)' // Warning
+                                'rgba(245, 158, 66, 0.5)', // Warning
                             ],
                             'borderColor' => [
                                 'rgba(59, 130, 246, 1)',
                                 'rgba(239, 68, 68, 1)',
-                                'rgba(245, 158, 66, 1)'
+                                'rgba(245, 158, 66, 1)',
                             ],
                         ],
                     ],
