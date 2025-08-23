@@ -22,6 +22,7 @@ class PlayerStats extends Page implements HasForms
     public ?string $serverName = null;
 
     public string $nick = '';
+    public string $lastSeen = '';
 
     public array $playerData = [];
 
@@ -79,10 +80,10 @@ class PlayerStats extends Page implements HasForms
                         }
 
                         return collect($results)
-                            ->mapWithKeys(fn ($item) => [
+                            ->mapWithKeys(fn($item) => [
                                 (string) ($item['nick'] ?? $item[0] ?? '') => (string) ($item['nick'] ?? $item[0] ?? ''),
                             ])
-                            ->filter(fn ($label, $value) => $value !== '')
+                            ->filter(fn($label, $value) => $value !== '')
                             ->toArray();
                     } catch (\Throwable $e) {
                         logger()->error('Player search failed', ['query' => $search, 'error' => $e->getMessage()]);
@@ -151,7 +152,8 @@ class PlayerStats extends Page implements HasForms
             $this->playerData = DcsServerBotApi::getPlayerInfo($this->serverName, $result[0]['nick'], $result[0]['date']);
 
             // sync form and state
-            $this->nick = $identifier;
+            $this->nick = $result[0]['nick'];
+            $this->lastSeen = $result[0]['date'] ?? '';
             $this->form->fill(['nick' => $this->nick]);
 
             // Persist selection in sessionStorage via Livewire dispatch (client listens with Livewire.on)
@@ -174,6 +176,7 @@ class PlayerStats extends Page implements HasForms
     public function clearSelection(): void
     {
         $this->nick = '';
+        $this->lastSeen = '';
         $this->playerData = [];
         $this->showForm = true;
         $this->form->fill(['nick' => '']);

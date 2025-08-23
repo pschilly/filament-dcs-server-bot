@@ -18,7 +18,7 @@
                 @php
                     $playTimeForHumans = round(
                         Carbon\CarbonInterval::seconds(
-                            isset($playerData['playtime']) ? round($playerData['playtime'] / 60) * 60 : 0
+                            isset($playerData['overall']['playtime']) ? round($playerData['overall']['playtime'] / 60) * 60 : 0
                         )->cascade()->totalHours
                     );
                 @endphp
@@ -31,16 +31,16 @@
                                 Flight Time - {{ $playTimeForHumans }}h
                             </x-filament::badge>
                             <x-filament::badge icon="plane_takeoff" color="success">
-                                Takeoffs - {{ $playerData['takeoffs'] }}
+                                Takeoffs - {{ $playerData['overall']['takeoffs'] }}
                             </x-filament::badge>
                             <x-filament::badge icon="plane_landing" color="primary">
-                                Landings - {{ $playerData['landings'] }}
+                                Landings - {{ $playerData['overall']['landings'] }}
                             </x-filament::badge>
                             <x-filament::badge icon="pilot_parachute" color="warning">
-                                Ejections - {{ $playerData['ejections'] }}
+                                Ejections - {{ $playerData['overall']['ejections'] }}
                             </x-filament::badge>
                             <x-filament::badge icon="plane_crash" color="danger">
-                                Crashes - {{ $playerData['crashes'] }}
+                                Crashes - {{ $playerData['overall']['crashes'] }}
                             </x-filament::badge>
                         </div>
                     </div>
@@ -57,16 +57,17 @@
                     @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PvpChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
                     @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\ModuleChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
                     @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\SortieChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
+                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\CombatChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
                 </div>
                 <!-- End Page Widgets -->
-
+{{-- 
 <pre>
     - lastSessionKills
     - lastSessionDeaths
     - credits
     - squadrons
 {{  json_encode($playerData, JSON_PRETTY_PRINT) }}
-</pre>
+</pre> --}}
             </div>
             @endif
         @endif
