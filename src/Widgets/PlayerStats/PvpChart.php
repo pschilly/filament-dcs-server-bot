@@ -6,7 +6,14 @@ use Filament\Widgets\ChartWidget;
 
 class PvpChart extends ChartWidget
 {
-    protected ?string $pollingInterval = '120s';
+    protected $listeners = [
+        'serverSelected' => 'handleServerSelected',
+    ];
+
+    public function handleServerSelected(): void
+    {
+        $this->dispatch('$refresh');
+    }
 
     protected ?string $heading = 'PVP Statistics';
 

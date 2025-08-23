@@ -53,10 +53,10 @@
                 <!-- End Header -->
                 <!-- Page Widgets -->
                 <div class="mt-6 fi-sc fi-sc-has-gap fi-grid lg:fi-grid-cols" style="--cols-lg: repeat(4, minmax(0, 1fr)); --cols-default: repeat(1, minmax(0, 1fr));">
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PveChart::class, ['playerData' => $playerData])
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PvpChart::class, ['playerData' => $playerData])
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\ModuleChart::class, ['playerData' => $playerData])
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\SortieChart::class, ['playerData' => $playerData])
+                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PveChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
+                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PvpChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
+                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\ModuleChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
+                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\SortieChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
                 </div>
                 <!-- End Page Widgets -->
 

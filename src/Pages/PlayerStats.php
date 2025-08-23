@@ -36,6 +36,7 @@ class PlayerStats extends Page implements HasForms
     public function handleServerSelected($serverName): void
     {
         $this->serverName = $serverName;
+        $this->loadPlayer($this->nick);
     }
 
     public function restorePlayerFromSession(string $nick): void

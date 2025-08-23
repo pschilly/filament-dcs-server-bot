@@ -6,7 +6,9 @@ use Filament\Widgets\ChartWidget;
 
 class PveChart extends ChartWidget
 {
-    protected ?string $pollingInterval = '120s';
+    protected $listeners = [
+        'serverSelected' => '$refresh',
+    ];
 
     protected ?string $heading = 'PVE Statistics';
 
