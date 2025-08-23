@@ -34,6 +34,7 @@ class WidgetManager
         Widgets\PlayerStats\PvpChart::class,
         Widgets\PlayerStats\PveChart::class,
         Widgets\PlayerStats\SortieChart::class,
+        Widgets\PlayerStats\CombatChart::class,
     ];
 
     public static function make(): static
