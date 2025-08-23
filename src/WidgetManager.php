@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pschilly\FilamentDcsServerStats;
 
+use Filament\Widgets\Widget;
 use Filament\Widgets\WidgetConfiguration;
 use Livewire\Livewire;
 use Livewire\Mechanisms\ComponentRegistry;
@@ -30,7 +31,10 @@ class WidgetManager
         Widgets\Leaderboard\Podium::class,
 
         //Player Stats Widgets
-
+        Widgets\PlayerStats\ModuleChart::class,
+        Widgets\PlayerStats\PvpChart::class,
+        Widgets\PlayerStats\PveChart::class,
+        Widgets\PlayerStats\SortieChart::class,
     ];
 
     public static function make(): static
