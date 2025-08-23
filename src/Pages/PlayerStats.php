@@ -20,13 +20,11 @@ class PlayerStats extends Page implements HasForms
 
     public ?string $serverName = null;
 
-    public array $playerData = [];
-    public bool $showForm = true;
-    public string $activeTab = 'tab1';
-
-    // form state / results
 
     public string $nick = '';
+    public array $playerData = [];
+    public bool $showForm = true;
+    public string $tab = 'lifetime-statistics';
 
     protected $listeners = [
         'serverSelected' => 'handleServerSelected',
@@ -182,13 +180,7 @@ class PlayerStats extends Page implements HasForms
     // Return dynamic page title: "<name>'s Statistics" when a player is selected
     public function getTitle(): string
     {
-        $name = $this->playerData['nick'] ?? $this->nick ?? '';
-
-        if (trim((string) $name) !== '') {
-            return "{$name} - Player Statistics";
-        }
-
-        return 'Select a player...';
+        return '';
     }
 
 
@@ -196,11 +188,11 @@ class PlayerStats extends Page implements HasForms
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('changePlayer')
-                ->label('Change Player')
-                ->action('clearSelection')
-                ->icon(Heroicon::ChevronDoubleLeft)
-                ->visible(fn(): bool => !$this->showForm),
+            // Action::make('changePlayer')
+            //     ->label('Change Player')
+            //     ->action('clearSelection')
+            //     ->icon(Heroicon::ChevronDoubleLeft)
+            //     ->visible(fn(): bool => !$this->showForm),
         ];
     }
 }

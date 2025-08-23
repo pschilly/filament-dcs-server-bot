@@ -14,103 +14,47 @@
                 @if(empty($playerData))
                     <div class="text-sm text-gray-600">No data available for <strong>{{ $nick }}</strong>.</div>
                 @else
-                <div x-data x-init="document.title = '{{ e($this->getTitle()) }}'">
-{{-- Desktop tabs --}}
-<div class="hidden sm:block">
-    <x-filament::tabs label="Statistics Sections" wire:model.live="activeTab">
-        <x-filament::tabs.item
-            :active="$activeTab === 'tab1'"
-            wire:click="$set('activeTab', 'tab1')"
-            icon="heroicon-m-bell"
-        >
-            Lifetime Statistics
-        </x-filament::tabs.item>
-        <x-filament::tabs.item
-            :active="$activeTab === 'tab2'"
-            wire:click="$set('activeTab', 'tab2')"
-            icon="heroicon-m-bell"
-        >
-            Session Statistics
-            <x-slot name="badge">
-                <x-filament::badge color="info">
-                    New
-                </x-filament::badge>
-            </x-slot>
-        </x-filament::tabs.item>
-        <x-filament::tabs.item
-            :active="$activeTab === 'tab3'"
-            wire:click="$set('activeTab', 'tab3')"
-            icon="heroicon-m-bell"
-        >
-            Airframe Statistics
-        </x-filament::tabs.item>
-        <x-filament::tabs.item
-            :active="$activeTab === 'tab4'"
-            wire:click="$set('activeTab', 'tab4')"
-            icon="heroicon-m-bell"
-        >
-            Weapon Statistics
-        </x-filament::tabs.item>
-    </x-filament::tabs>
-</div>
-
-{{-- Mobile dropdown --}}
-<div class="sm:hidden mb-4">
-    <x-filament::input.wrapper>
-    <x-filament::input.select 
-        wire:model.live="activeTab"
-        id="mobile_stat_cat">
-        <option value="tab1">Lifetime Statistics</option>
-        <option value="tab2">Session Statistics</option>
-        <option value="tab3">Airframe Statistics</option>
-        <option value="tab4">Weapon Statistics</option>
-    </x-filament::input.select>
-</x-filament::input.wrapper>
-</div>
-
-<div 
-wire:show="activeTab === 'tab1'"
-
->
-
-<h1>LIFETIME STATS</h1>
-                        - PLAYTIME
-                        - kills
-                        - deaths
-                        - pvp kills
-                        - pvp deaths
-                        - kdr
-                        - kdr pvp
-                        - takeoffs
-                        - landings
-                        - crashes
-                        - ejects
-                         - tk
-</div>
-
-<div wire:show="activeTab === 'tab2'" 
->
-
-<h1>SESSION STATS</h1>
-- kills
-- deaths
-</div>
-
-<div wire:show="activeTab === 'tab3'"
->
-
-<h1>VEHICLES</h1>
-- module name & kills
-</div>
-
-<div wire:show="activeTab === 'tab4'"
->
-
- <h1>WEAPONS</h1>
-                    top ones
-</div>
-                                    
-            </div>
+                <div x-data x-init="document.title = '{{ e($nick." - Player Statistics") }}'">
+                    <!-- Header -->
+                    @php
+                        $playTimeForHumans = round(
+                            Carbon\CarbonInterval::seconds(
+                                isset($playerData['playtime']) ? round($playerData['playtime'] / 60) * 60 : 0
+                            )->cascade()->totalHours
+                        );
+                    @endphp
+                    <div class="lg:flex lg:items-center lg:justify-between">
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-2xl/7 font-bold text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">{{ $nick }}'s Statistics</h2>
+                            <div class="mt-4 flex flex-col sm:mt-4 sm:flex-row sm:flex-wrap sm:space-x-2">
+                                <x-filament::badge icon="phosphor-clock-countdown-duotone" color="gray">
+                                    Flight Time - {{ $playTimeForHumans }}h
+                                </x-filament::badge>
+                                <x-filament::badge icon="plane_takeoff" color="success">
+                                    Takeoffs - {{ $playerData['takeoffs'] }}
+                                </x-filament::badge>
+                                <x-filament::badge icon="plane_landing" color="primary">
+                                    Landings - {{ $playerData['landings'] }}
+                                </x-filament::badge>
+                                <x-filament::badge icon="pilot_parachute" color="warning">
+                                    Ejections - {{ $playerData['ejections'] }}
+                                </x-filament::badge>
+                                <x-filament::badge icon="plane_crash" color="danger">
+                                    Crashes - {{ $playerData['crashes'] }}
+                                </x-filament::badge>
+                            </div>
+                        </div>
+                        <div class="mt-5 flex lg:mt-0 lg:ml-4">
+                            <x-filament::button wire:click="clearSelection" color="primary" size="xl" icon="heroicon-o-chevron-double-left">
+                                Select Another Player
+                            </x-filament::button>
+                        </div>
+                        </div>
+<!-- End Header -->
+<pre>
+{{  json_encode($playerData, JSON_PRETTY_PRINT) }}
+</pre>
+                </div>
                 @endif
         @endif
     </div>

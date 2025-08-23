@@ -2,11 +2,13 @@
 
 namespace Pschilly\FilamentDcsServerStats;
 
+use BladeUI\Icons\Factory;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
+use Illuminate\Contracts\Container\Container;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -31,6 +33,14 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        // Register your icon set programmatically
+        $this->app->afterResolving(Factory::class, function (Factory $factory) {
+            $factory->add('default', [
+                'path' => __DIR__ . '/../resources/svg', // Path to your SVGs
+                'prefix' => '', // A unique prefix for your icons
+            ]);
+        });
+
         WidgetManager::make()->boot();
 
         // Asset Registration
