@@ -22,6 +22,7 @@ class PlayerStats extends Page implements HasForms
     public ?string $serverName = null;
 
     public string $nick = '';
+
     public string $lastSeen = '';
 
     public array $playerData = [];
@@ -80,10 +81,10 @@ class PlayerStats extends Page implements HasForms
                         }
 
                         return collect($results)
-                            ->mapWithKeys(fn($item) => [
+                            ->mapWithKeys(fn ($item) => [
                                 (string) ($item['nick'] ?? $item[0] ?? '') => (string) ($item['nick'] ?? $item[0] ?? ''),
                             ])
-                            ->filter(fn($label, $value) => $value !== '')
+                            ->filter(fn ($label, $value) => $value !== '')
                             ->toArray();
                     } catch (\Throwable $e) {
                         logger()->error('Player search failed', ['query' => $search, 'error' => $e->getMessage()]);
