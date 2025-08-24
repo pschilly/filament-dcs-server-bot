@@ -38,7 +38,7 @@ class TopSquadrons extends ChartWidget
 
         // Get all squadrons
         $cacheKey = 'dcsstats_squadrons';
-        $squadrons = Cache::remember($cacheKey, now()->addHours(1), fn() => DcsServerBotApi::getSquadronList());
+        $squadrons = Cache::remember($cacheKey, now()->addHours(1), fn () => DcsServerBotApi::getSquadronList());
 
         $squadronCredits = [];
 
@@ -50,7 +50,7 @@ class TopSquadrons extends ChartWidget
             }
 
             $sqnCreditscacheKey = 'dcsstats_squadron_credits_' . Str::slug($name);
-            $creditsResponse = Cache::remember($sqnCreditscacheKey, now()->addHours(1), fn() => DcsServerBotApi::getSquadronCredits($name));
+            $creditsResponse = Cache::remember($sqnCreditscacheKey, now()->addHours(1), fn () => DcsServerBotApi::getSquadronCredits($name));
             $credits = $creditsResponse['credits'] ?? 0;
             $squadronCredits[$name] = $credits;
         }
