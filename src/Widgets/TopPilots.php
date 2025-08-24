@@ -38,7 +38,10 @@ class TopPilots extends ChartWidget
     protected ?string $pollingInterval = '120s';
 
     // protected ?string $heading = 'Top Pilots';
-    protected array | string | int $columnSpan = 2;
+    protected int | string | array $columnSpan = [
+        'sm' => 4,
+        'lg' => 2,
+    ];
 
     protected ?string $maxHeight = '300px';
 

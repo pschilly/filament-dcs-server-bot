@@ -15,7 +15,11 @@ class Dashboard extends BaseDashboard
 
     public function getColumns(): int | array
     {
-        return 4;
+        return [
+            'sm' => 1, // Use 1 column on small screens and up
+            'md' => 2, // Use 2 columns on medium screens and up
+            'lg' => 4, // Use 3 columns on large screens and up
+        ];
     }
 
     public function getWidgets(): array

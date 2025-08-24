@@ -30,7 +30,11 @@ class ServerStatistics extends StatsOverviewWidget
         $this->dispatch('$refresh');
     }
 
-    protected int | string | array $columnSpan = 4;
+    // protected ?string $heading = 'Top Pilots';
+    protected int | string | array $columnSpan = [
+        'sm' => 4,
+        'lg' => 2,
+    ];
 
     protected function getStats(): array
     {
@@ -50,10 +54,15 @@ class ServerStatistics extends StatsOverviewWidget
         $avgPlaytimeSeconds = isset($data['avgPlaytime']) ? round($data['avgPlaytime'] / 60) * 60 : null;
 
         return [
-            Stat::make('Average Sortie Time', (! is_null($avgPlaytimeSeconds)) ? CarbonInterval::seconds($avgPlaytimeSeconds)->cascade()->forHumans() : 'N/A')->description('Average flight time per session'),
+            Stat::make('Average Sortie Time', (! is_null($avgPlaytimeSeconds)) ? CarbonInterval::seconds($avgPlaytimeSeconds)->cascade()->forHumans() : 'N/A')->description('Average flight time'),
             Stat::make('Combat Record', $data['totalKills'] . ' / ' . $data['totalDeaths'])->description('Kills / Deaths'),
             Stat::make('Total Players', $data['totalPlayers'])->description('Unique pilots'),
-            Stat::make('Playtime', (! is_null($data['totalPlaytime'])) ? CarbonInterval::hours($data['totalPlaytime'])->cascade()->forHumans() : 'N/A')->description('All time'),
+            Stat::make(
+                'Playtime',
+                (! is_null($data['totalPlaytime']))
+                    ? round(CarbonInterval::hours($data['totalPlaytime'])->totalHours) . ' hours'
+                    : 'N/A'
+            )->description('All time'),
 
         ];
     }

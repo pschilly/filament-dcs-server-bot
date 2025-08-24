@@ -19,7 +19,11 @@ class DailyPlayersChart extends ChartWidget
 
     protected ?string $heading = 'Daily Players Chart';
 
-    protected array | string | int $columnSpan = 4;
+    // protected ?string $heading = 'Top Pilots';
+    protected int | string | array $columnSpan = [
+        'sm' => 4,
+        'lg' => 2,
+    ];
 
     protected ?string $maxHeight = '300px';
 
