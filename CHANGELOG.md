@@ -2,6 +2,10 @@
 
 All notable changes to `filament-dcs-server-stats` will be documented in this file.
 
+## 0.1.2 - 2025-08-24
+
+**Full Changelog**: https://github.com/pschilly/filament-dcs-server-stats/compare/0.1.1...0.1.2
+
 ## 0.1.1 - 2025-08-24
 
 **Full Changelog**: https://github.com/pschilly/filament-dcs-server-stats/compare/0.1.0...0.1.1
