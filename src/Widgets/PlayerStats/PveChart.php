@@ -22,12 +22,11 @@ class PveChart extends ChartWidget
 
     public ?string $selectedModule = null;
 
-
     public function getFilters(): array
     {
         return [
             'overall' => 'All Time',
-            'last_session' => 'Last Session'
+            'last_session' => 'Last Session',
         ];
     }
 

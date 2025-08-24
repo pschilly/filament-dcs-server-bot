@@ -2,7 +2,6 @@
 
 namespace Pschilly\FilamentDcsServerStats\Widgets\PlayerStats;
 
-use Carbon\CarbonInterval;
 use Filament\Widgets\ChartWidget;
 
 class CombatChart extends ChartWidget
@@ -32,7 +31,7 @@ class CombatChart extends ChartWidget
     {
         return [
             'overall' => 'All Time',
-            'last_session' => 'Last Session'
+            'last_session' => 'Last Session',
         ];
     }
 
@@ -62,7 +61,7 @@ class CombatChart extends ChartWidget
                 'Ships',
                 'Air Defence',
                 'Ground',
-                'Teamkills'
+                'Teamkills',
             ],
             'datasets' => [
                 [
@@ -91,7 +90,7 @@ class CombatChart extends ChartWidget
                         $deathsShips,
                         $deathsSams,
                         $deathsGround,
-                        0
+                        0,
                     ],
                     'fill' => true,
                     'backgroundColor' => [

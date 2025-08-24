@@ -32,7 +32,7 @@ class SortieChart extends ChartWidget
     {
         return [
             'overall' => 'All Time',
-            'last_session' => 'Last Session'
+            'last_session' => 'Last Session',
         ];
     }
 
