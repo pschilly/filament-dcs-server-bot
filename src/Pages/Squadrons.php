@@ -5,6 +5,7 @@ namespace Pschilly\FilamentDcsServerStats\Pages;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
+use Pschilly\DcsServerBotApi\DcsServerBotApi;
 
 class Squadrons extends Page
 {
@@ -12,14 +13,16 @@ class Squadrons extends Page
 
     protected string $view = 'filament-dcs-server-stats::pages.squadrons.index';
 
-    public $serverName = null;
+    public array $squadrons = [];
 
-    protected $listeners = [
-        'serverSelected' => 'handleServerSelected',
-    ];
-
-    public function handleServerSelected($serverName)
+    public function mount(?string $squadronName = null): void
     {
-        $this->serverName = $serverName;
+        $this->squadrons = $this->getSquadrons();
+    }
+
+    public static function getSquadrons(): array
+    {
+        // Fetch the squadrons from the API or any other source
+        return DcsServerBotApi::getSquadronList();
     }
 }
