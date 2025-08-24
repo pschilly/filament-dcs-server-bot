@@ -22,7 +22,7 @@ class DailyPlayersChart extends ChartWidget
     // protected ?string $heading = 'Top Pilots';
     protected int | string | array $columnSpan = [
         'sm' => 4,
-        'lg' => 2,
+        'lg' => 4,
     ];
 
     protected ?string $maxHeight = '300px';

@@ -33,7 +33,7 @@ class ServerStatistics extends StatsOverviewWidget
     // protected ?string $heading = 'Top Pilots';
     protected int | string | array $columnSpan = [
         'sm' => 4,
-        'lg' => 2,
+        'lg' => 4,
     ];
 
     protected function getStats(): array
