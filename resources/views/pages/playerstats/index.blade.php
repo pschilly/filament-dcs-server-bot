@@ -40,9 +40,6 @@
                             <x-filament::badge icon="phosphor-clock-countdown-duotone" color="gray">
                                 Flight Time - {{ $playTimeForHumans }}h
                             </x-filament::badge>
-                            <x-filament::badge icon="phosphor-clock-countdown-duotone" color="gray">
-                                Flight Time - {{ $playTimeForHumans }}h
-                            </x-filament::badge>
                             <x-filament::badge icon="plane_takeoff" color="success">
                                 Takeoffs - {{ $playerData['overall']['takeoffs'] }}
                             </x-filament::badge>
