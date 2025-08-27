@@ -57,10 +57,7 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
         }
     }
 
-    public function packageRegistered(): void
-    {
-        $this->app->register(StatsConfigPanelProvider::class);
-    }
+    public function packageRegistered(): void {}
 
     public function packageBooted(): void
     {
@@ -144,6 +141,8 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
      */
     protected function getMigrations(): array
     {
-        return [];
+        return [
+            'create_db_config_table',
+        ];
     }
 }
