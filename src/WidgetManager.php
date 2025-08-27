@@ -26,8 +26,6 @@ class WidgetManager
         Widgets\TopPilots::class,
         Widgets\TopSquadrons::class,
         Widgets\ServerStatistics::class,
-        // Leaderboard Widgets
-        Widgets\Leaderboard\Podium::class,
 
         // Player Stats Widgets
         Widgets\PlayerStats\ModuleChart::class,
