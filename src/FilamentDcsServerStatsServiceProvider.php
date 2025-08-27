@@ -6,8 +6,11 @@ use BladeUI\Icons\Factory;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
+use Pschilly\FilamentDcsServerStats\Commands\FilamentDcsServerStatsInstallCommand;
+use Pschilly\FilamentDcsServerStats\Providers\StatsConfigPanelProvider;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -25,10 +28,39 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package->name(static::$name)
-            ->hasViews();
+            ->hasViews()
+            ->hasCommands($this->getCommands())
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->publishMigrations()
+                    ->askToRunMigrations()
+                    ->askToStarRepoOnGitHub('pschilly/filament-dcs-server-stats');
+            });
+
+        $configFileName = $package->shortName();
+
+        if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
+            $package->hasConfigFile();
+        }
+
+        if (file_exists($package->basePath('/../database/migrations'))) {
+            $package->hasMigrations($this->getMigrations());
+        }
+
+        if (file_exists($package->basePath('/../resources/lang'))) {
+            $package->hasTranslations();
+        }
+
+        if (file_exists($package->basePath('/../resources/views'))) {
+            $package->hasViews(static::$viewNamespace);
+        }
     }
 
-    public function packageRegistered(): void {}
+    public function packageRegistered(): void
+    {
+        $this->app->register(StatsConfigPanelProvider::class);
+    }
 
     public function packageBooted(): void
     {
@@ -78,7 +110,9 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
      */
     protected function getCommands(): array
     {
-        return [];
+        return [
+            FilamentDcsServerStatsInstallCommand::class
+        ];
     }
 
     /**
