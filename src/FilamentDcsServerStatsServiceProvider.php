@@ -9,8 +9,6 @@ use Filament\Support\Assets\Js;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
-use Pschilly\FilamentDcsServerStats\Commands\FilamentDcsServerStatsInstallCommand;
-use Pschilly\FilamentDcsServerStats\Providers\StatsConfigPanelProvider;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -107,9 +105,7 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
      */
     protected function getCommands(): array
     {
-        return [
-            FilamentDcsServerStatsInstallCommand::class
-        ];
+        return [];
     }
 
     /**
@@ -141,8 +137,6 @@ class FilamentDcsServerStatsServiceProvider extends PackageServiceProvider
      */
     protected function getMigrations(): array
     {
-        return [
-            'create_db_config_table',
-        ];
+        return [];
     }
 }
