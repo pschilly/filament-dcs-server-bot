@@ -24,11 +24,10 @@ class Dashboard extends BaseDashboard
 
     public function getWidgets(): array
     {
-        return [
-            Widgets\ServerStatistics::class,
-            Widgets\DailyPlayersChart::class,
-            Widgets\TopPilots::class,
-            Widgets\TopSquadrons::class,
-        ];
+        // Get the current panel instance
+        $panel = filament()->getCurrentPanel();
+
+        // Return the widgets registered on the panel
+        return $panel->getWidgets();
     }
 }

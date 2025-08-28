@@ -62,22 +62,26 @@
                 </div>
                 <!-- End Header -->
                 <!-- Page Widgets -->
+                @php
+                    $widgetMap = [
+                        'pve-chart'     => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PveChart::class,
+                        'pvp-chart'     => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PvpChart::class,
+                        'module-chart'  => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\ModuleChart::class,
+                        'sortie-chart'  => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\SortieChart::class,
+                        'combat-chart'  => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\CombatChart::class,
+                    ];
+                    $enabledWidgetsRaw = db_config('website.player-stats-widgets', []);
+                    $enabledWidgets = collect($enabledWidgetsRaw)->pluck('widget-name')->all();
+                @endphp
+
                 <div class="mt-6 fi-sc fi-sc-has-gap fi-grid lg:fi-grid-cols" style="--cols-lg: repeat(4, minmax(0, 1fr)); --cols-default: repeat(1, minmax(0, 1fr));">
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PveChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\PvpChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\ModuleChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\SortieChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
-                    @livewire(\Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\CombatChart::class, ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
+                    @foreach($enabledWidgets as $slug)
+                        @if(isset($widgetMap[$slug]))
+                            @livewire($widgetMap[$slug], ['playerData' => $playerData], key($playerData['id'] ?? $playerData['nick'] ?? Str::random()))
+                        @endif
+                    @endforeach
                 </div>
                 <!-- End Page Widgets -->
-{{-- 
-<pre>
-    - lastSessionKills
-    - lastSessionDeaths
-    - credits
-    - squadrons
-{{  json_encode($playerData, JSON_PRETTY_PRINT) }}
-</pre> --}}
             </div>
             @endif
         @endif

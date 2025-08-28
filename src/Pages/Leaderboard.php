@@ -82,6 +82,42 @@ class Leaderboard extends Page implements HasTable
         }
     }
 
+    public function leaderboardColumns()
+    {
+        // Get the configured columns from the plugin
+        $pluginColumns = filament('filament-dcs-server-stats')->getLeaderboardColumns();
+
+        $columnMap = [
+            'rank' => TextColumn::make('rank')
+                ->label('No.')
+                ->view('filament-dcs-server-stats::tables.columns.leaderboard-row-number'),
+            'nick' => TextColumn::make('nick')->label('Callsign')->searchable(),
+            'kills' => TextColumn::make('kills')->label('Kills')->sortable(),
+            'deaths' => TextColumn::make('deaths')->label('Deaths')->sortable(),
+            'kdr' => TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
+            'credits' => TextColumn::make('credits')->label('Credits')->sortable(),
+            'playtime' => TextColumn::make('playtime')
+                ->label('Play Time')
+                ->formatStateUsing(fn($state) => \Carbon\CarbonInterval::seconds(round($state / 60) * 60)->cascade()->forHumans())
+                ->sortable(),
+        ];
+
+        // Always show rank and nick first
+        $columns = [
+            $columnMap['rank'],
+            $columnMap['nick'],
+            $columnMap['kills']
+        ];
+
+        // Add the rest based on plugin config (excluding rank and nick, which are always shown)
+        foreach ($pluginColumns as $key) {
+            if (isset($columnMap[$key]) && !in_array($key, ['rank', 'nick', 'kills'])) {
+                $columns[] = $columnMap[$key];
+            }
+        }
+
+        return $columns;
+    }
     public function table(Table $table): Table
     {
 
@@ -111,7 +147,7 @@ class Leaderboard extends Page implements HasTable
                 // 3) Apply search (do NOT reassign rank)
                 if (filled($search)) {
                     $filtered = $filtered->filter(
-                        fn ($item) => str_contains(strtolower($item['nick']), strtolower($search))
+                        fn($item) => str_contains(strtolower($item['nick']), strtolower($search))
                     )->values();
                 }
 
@@ -133,18 +169,7 @@ class Leaderboard extends Page implements HasTable
                     $page
                 );
             })
-            ->columns([
-                TextColumn::make('rank')
-                    ->label('No.')
-                    ->view('filament-dcs-server-stats::tables.columns.leaderboard-row-number'),
-                TextColumn::make('nick')->label('Callsign')->searchable(),
-                TextColumn::make('kills')->label('Kills')->sortable(),
-                TextColumn::make('deaths')->label('Deaths')->sortable(),
-                TextColumn::make('kdr')->label('KDR')->numeric(2)->sortable(),
-                TextColumn::make('credits')->label('Credits')->sortable(),
-                TextColumn::make('playtime')->label('Play Time')->formatStateUsing(fn ($state) => CarbonInterval::seconds(round($state / 60) * 60)->cascade()->forHumans())->sortable(),
-
-            ])
+            ->columns($this->leaderboardColumns())
             ->striped()
             ->searchable()
             ->persistSortInSession()
