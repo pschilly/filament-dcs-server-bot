@@ -85,7 +85,8 @@ class Leaderboard extends Page implements HasTable
     public function leaderboardColumns()
     {
         // Get the configured columns from the plugin
-        $pluginColumns = filament('filament-dcs-server-stats')->getLeaderboardColumns();
+        $pluginColumnsRaw = filament('filament-dcs-server-stats')->getLeaderboardColumns();
+        $pluginColumns = collect($pluginColumnsRaw)->pluck('column-name')->all();
 
         $columnMap = [
             'rank' => TextColumn::make('rank')
@@ -102,14 +103,14 @@ class Leaderboard extends Page implements HasTable
                 ->sortable(),
         ];
 
-        // Always show rank and nick first
+        // Always show rank, nick, kills first
         $columns = [
             $columnMap['rank'],
             $columnMap['nick'],
-            $columnMap['kills']
+            $columnMap['kills'],
         ];
 
-        // Add the rest based on plugin config (excluding rank and nick, which are always shown)
+        // Add the rest based on plugin config (excluding rank, nick, kills)
         foreach ($pluginColumns as $key) {
             if (isset($columnMap[$key]) && !in_array($key, ['rank', 'nick', 'kills'])) {
                 $columns[] = $columnMap[$key];
