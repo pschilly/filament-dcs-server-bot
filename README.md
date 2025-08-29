@@ -1,7 +1,7 @@
 # DCS Server Stats FilamentPHP Plugin
 
 ![Filament 4.x Required](https://img.shields.io/badge/Filament-4.x-FF2D20?style=for-the-badge)
-[![DCSServerBotAPI](https://img.shields.io/badge/DCS_Server_Bot_API-0.1-green?style=for-the-badge)](https://github.com/pschilly/dcs-server-bot-api)
+[![DCSServerBotAPI](https://img.shields.io/badge/DCS_Server_Bot_API-0.3-green?style=for-the-badge)](https://github.com/pschilly/dcs-server-bot-api)
 [![DCSServerBot](https://img.shields.io/badge/🤖_Requires-DCS_Server_Bot-green?style=for-the-badge)](https://github.com/Special-K-s-Flightsim-Bots/DCSServerBot)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/pschilly/filament-dcs-server-stats/fix-php-code-style-issues.yml?branch=main&style=for-the-badge)
 
