@@ -70,7 +70,7 @@
                         'sortie-chart'  => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\SortieChart::class,
                         'combat-chart'  => \Pschilly\FilamentDcsServerStats\Widgets\PlayerStats\CombatChart::class,
                     ];
-                    $enabledWidgetsRaw = db_config('website.player-stats-widgets', []);
+                    $enabledWidgetsRaw = filament('filament-dcs-server-stats')->getPlayerStatsWidgets();
                     $enabledWidgets = collect($enabledWidgetsRaw)->pluck('widget-name')->all();
                 @endphp
 

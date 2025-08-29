@@ -146,6 +146,17 @@ class FilamentDcsServerStatsPlugin implements Plugin
         ];
     }
 
+    public function getPlayerStatsWidgets(): array
+    {
+        return $this->playerStatsWidgets ?? [
+            'pve-chart',
+            'pvp-chart',
+            'module-chart',
+            'sortie-chart',
+            'combat-chart',
+        ];
+    }
+
     public function getId(): string
     {
         return 'filament-dcs-server-stats';
