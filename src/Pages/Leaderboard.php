@@ -61,7 +61,7 @@ class Leaderboard extends Page implements HasTable
     {
         $serverName = $this->serverName ?? '';
         $cacheName = Str::slug($this->serverName);
-        $cacheKey = "lead_$cacheName";
+        $cacheKey = "leaderboard_$cacheName";
         logger(['section' => 'mount', 'cacheKey' => $cacheKey, 'serverName' => $this->serverName]);
         $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName) {
             return DcsServerBotApi::getLeaderboard(
