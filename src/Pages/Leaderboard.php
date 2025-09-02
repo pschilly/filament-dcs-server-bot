@@ -42,7 +42,7 @@ class Leaderboard extends Page implements HasTable
             return DcsServerBotApi::getLeaderboard(
                 what: 'kills',
                 order: 'desc',
-                limit: 10000,
+                limit: 100,
                 offset: 0,
                 server_name: $serverName, // <-- use the parameter, not $this->serverName
                 returnType: 'collection'
