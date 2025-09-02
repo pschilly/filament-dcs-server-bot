@@ -3,7 +3,11 @@
         @foreach ($squadrons as $squadron)
         <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
             <div class="flex flex-1 flex-col p-8">
-            <img src="{{ $squadron['image_url'] }}" alt="" class="mx-auto size-48 shrink-0" />
+            @if(!empty($squadron['image_url']))
+                <img src="{{ $squadron['image_url'] }}" alt="" class="mx-auto size-48 shrink-0" />
+            @else
+                @svg('squadron', 'size-48 fill-gray-800')
+            @endif
             <h3 class="mt-6 text-xl font-medium text-gray-900 dark:text-white">{{ $squadron['name'] }}</h3>
             <dl class="mt-1 flex grow flex-col justify-between">
                 <dt class="sr-only">Title</dt>
