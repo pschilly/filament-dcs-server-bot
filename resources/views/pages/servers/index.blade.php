@@ -11,7 +11,6 @@
             'Stopped' => 'heroicon-s-stop'
         ];
     @endphp
-
     @foreach($servers as $server)
     <x-filament::section 
         collapsible
@@ -27,7 +26,7 @@
         
 
         <x-slot name="afterHeader">
-            
+            @if($server['status'] != 'Shutdown')
             <x-filament::badge
             color="{{ ($server['password'] ? 'warning' : 'success') }}"
             icon="{{ $server['password'] ? 'heroicon-c-lock-closed' : 'heroicon-c-lock-open' }}">
@@ -38,13 +37,15 @@
             icon="heroicon-o-arrow-path-rounded-square">
             {{ \Carbon\Carbon::parse($server['restart_time'])->diffForHumans([ 'parts' => 2 ]) }}
             </x-filament::badge>
+            @endif
             <x-filament::badge
             color="{{ $serverStatusColor[$server['status']] ?? 'gray' }}"
             icon="{{ $serverStatusIcon[$server['status']] ?? 'heroicon-o-question-mark-circle' }}">
                 {{ $server['status'] }}
             </x-filament::badge>
         </x-slot>
-
+        
+        @if($server['status'] != 'Shutdown')
         <x-slot name="description">
             <div>
             <x-filament::badge
@@ -82,7 +83,7 @@
                 </x-filament::badge>
             </div>
         </x-slot>
-
+        @endif
         {{-- Extensions --}}
             @foreach($server['extensions'] as $extension)
                 @if($extension['name'] !== 'Required Mods')
@@ -105,7 +106,7 @@
                 </x-filament::fieldset>
                 @endif
             @endforeach
-
+            @if(!empty($server['players']))
             <x-filament::fieldset class="mt-6">
                 <x-slot name="label">
                     Online Pilots
@@ -119,8 +120,11 @@
                     </x-filament::badge>
                 @endforeach
             </x-filament::fieldset>
-        {{-- Pilots --}}
-        
+            @endif
+
+            @if($server['status'] == 'Shutdown')
+            This server is currently offline.
+            @endif
 
     </x-filament::section>
     @endforeach
