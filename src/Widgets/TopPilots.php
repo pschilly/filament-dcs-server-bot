@@ -88,22 +88,25 @@ class TopPilots extends ChartWidget
         $number = $this->filters['pilotCount'] ?? 5;
         $chartType = $this->filters['chartType'] ?? 'kills';
 
-        // Call the appropriate API method based on the selected chart type
         $serverName = $this->serverName;
-
         $cacheName = Str::slug($serverName);
         $cacheKey = "leaderboard_$cacheName";
         $response = Cache::remember($cacheKey, now()->addHours(1), function () use ($serverName, $chartType) {
             return DcsServerBotApi::getLeaderboard(
                 what: $chartType,
                 order: 'desc',
-                limit: 10,
-                server_name: $serverName, // <-- use the parameter, not $this->serverName
+                limit: 20,
+                server_name: $serverName,
                 returnType: 'json'
             );
         });
 
-        $pilotData = $response['items'];
+        $pilotData = $response['items'] ?? [];
+
+        // Sort by selected chartType
+        usort($pilotData, function ($a, $b) use ($chartType) {
+            return ($b[$chartType] ?? 0) <=> ($a[$chartType] ?? 0);
+        });
 
         $labels = [];
         $kills = [];
@@ -118,7 +121,7 @@ class TopPilots extends ChartWidget
         }
 
         // Change dataset order and assign colors based on chartType
-        if ($chartType === 'topkdr') {
+        if ($chartType === 'kdr') {
             $datasets = [
                 [
                     'label' => 'KDR',
