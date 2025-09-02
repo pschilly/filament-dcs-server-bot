@@ -95,7 +95,7 @@ class TopPilots extends ChartWidget
             return DcsServerBotApi::getLeaderboard(
                 what: $chartType,
                 order: 'desc',
-                limit: 20,
+                limit: 100,
                 server_name: $serverName,
                 returnType: 'json'
             );
